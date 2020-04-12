@@ -125,7 +125,6 @@ class ComponentsNavbar extends React.Component {
       console.log("response");
       console.log(response);
       this.setState({isModalOpen:false});
-
   })
   .catch(function (response) {
       //handle error
