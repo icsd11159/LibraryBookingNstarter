@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Log;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/loginc', 'LoginControllers@postLogin');
-Log::info("Agency Api.php");
+Route::get('/loginc', 'LoginControllers@postLogin');
+Route::post('/registerc', 'RegisterControllers@postRegister');
+Log::info("Api.php");
 
 /* 
 Route::middleware('auth:api')->post('/login', function (Request $request) {

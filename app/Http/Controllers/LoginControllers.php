@@ -20,15 +20,26 @@ class LoginControllers extends Controller
         'email' => 'required',
         'password' => 'required',
       ]);
+      $user = Users::where('password', $password)->where('email', $email)->exists();
+  
+     // ->orderBy('created_at', 'desc')
+     // ->withCount(['tasks' => function ($query) {
+     //   $query->where('is_completed', false);
+     // }])
+     
+    if( $user!=1){
+     Log::info( "Not Find the user!" );
+     return false;
+    }
+    else{
+     Log::info( " Find the user!" );
+     Log::info(  $user  );
+   
 
-      $project = Users::create([
-        'email' => $validatedData['email'],
-        'password' => $validatedData['password'],
-        'name' => 'justcheck'
-
-      ]);
-
-      return response()->json('Project created!');
+     return "Find Success";
+     
+    }
+   
         
     }
 }

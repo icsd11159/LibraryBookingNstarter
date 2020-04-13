@@ -22,6 +22,8 @@ import {Register}from " ../../../src/views/examples/Register.js";
 import Signup from "../../../src/views/IndexSections/Signup.js";
 import ReactModal from "react-modal";
 import axios from "axios";
+import { useAlert } from 'react-alert'
+import { withAlert } from 'react-alert'
 // reactstrap components
 import {
   Button,
@@ -59,16 +61,22 @@ ReactModal.setAppElement("#root");
 class ComponentsNavbar extends React.Component {
 
   constructor(props) {
+   
     super(props);
     this.state = {
       collapseOpen: false,
       color: "navbar-transparent",
       isModalOpen:false,
       Usermail:'',
-      Password:''
+      Password:'',
+      Name:'',
+      isRegisterModalOpen:false,
+      Signin: true,
+      
     };
     this.handlePassWordChange= this.handlePassWordChange.bind(this);
     this.handleEmailChange= this.handleEmailChange.bind(this);
+    this.handleNameChange= this.handleNameChange.bind(this);
    // this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -91,16 +99,22 @@ class ComponentsNavbar extends React.Component {
   //  document.getElementById("signup-section");
     
   }
+  openRegister = () =>{
+    this.setState({isRegisterModalOpen:true,isModalOpen:false})
+  }
   
   handlePassWordChange(event) {
     this.setState({Password: event.target.value});
+  }
+  handleNameChange(event) {
+    this.setState({Name: event.target.value});
   }
   handleEmailChange(event){
     this.setState({Usermail: event.target.value});
 
   }
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.Password);
+    this.state.alert('A name was submitted: ' + this.state.Password);
     event.preventDefault();
   }
   closeModal = () => {
@@ -108,24 +122,62 @@ class ComponentsNavbar extends React.Component {
     this.setState({isModalOpen:false});
 
   }
-  userRegister=()=>{
-    console.log(this.state.Password)
+  closeRegisterModal = () =>{
+   
+   
+    this.setState({isModalOpen:true, isRegisterModalOpen:false});
+
+  }
+  useLogin = () =>{
+    //const alert = useAlert();
     return axios({
       url:"api/loginc",
+      method:"GET",
+      header:{
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      params: { password: this.state.Password, email: this.state.Usermail}
+    }).then((res) => {
+      if(!res.data){
+     alert.error('You are succesfully loged in')
+
+      }
+      else{
+        console.log(res.data)
+        alert.success('You are succesfully loged in')
+         this.setState({isModalOpen:false});
+      }
+    
+    })
+  
+  .catch(function ($response) {
+      //handle error
+      console.log($response)
+     
+  });
+  }
+  userRegister=()=>{
+   // const alert = useAlert();
+
+    console.log(this.state.Password)
+    return axios({
+      url:"api/registerc",
       method:"POST",
       header:{
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
         Accept: "application/json"
       },
-      data: { password: this.state.Password, email: this.state.Usermail}
-    }).then((res) => {console.log(res)})
-    .then(function (response) {
-      //handle success
-      console.log("response");
-      console.log(response);
-      this.setState({isModalOpen:false});
-  })
+      data: { password: this.state.Password, email: this.state.Usermail, name:this.state.Name}
+    }).then((res) => {
+      console.log(res.data)
+     alert.success('You are succesfully registered')
+
+      this.setState({isRegisterModalOpen:false});
+    })
+  
   .catch(function (response) {
       //handle error
       console.log(response)
@@ -318,15 +370,16 @@ class ComponentsNavbar extends React.Component {
         </Container>
     
       </Navbar>
-     
-  
+   
+    
       <Col sm="5" md="7">
      <Modal
     
      isOpen={this.state.isModalOpen}
     
      >
- <Button color="primary"   /* to="register-page" tag={Link}  */
+          
+            <Button color="primary"   /* to="register-page" tag={Link}  */
               onClick={this.closeModal}
               >
                   Close
@@ -423,7 +476,7 @@ class ComponentsNavbar extends React.Component {
                  
                 </div>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="button" onClick={this.userRegister}>
+                  <Button className="my-4" color="primary" type="button" onClick={this.useLogin}>
                     Sign in
                   </Button>
                 </div>
@@ -445,17 +498,158 @@ class ComponentsNavbar extends React.Component {
               <a
                 className="text-light"
                 href="#pablo"
-                onClick={e => e.preventDefault()}
+                onClick={ 
+                  this.openRegister
+                }
                
               >
                 <small>Create new account</small>
               </a>
             </Col>
           </Row>
+          </Modal>
+      </Col>
      
-    
-</Modal>
-</Col>
+
+         <Col sm="5" md="7">
+         <Modal
+        
+         isOpen={this.state.isRegisterModalOpen}
+        
+         >
+
+<>
+       
+<Button color="primary"   /* to="register-page" tag={Link}  */
+              onClick={this.closeRegisterModal}
+              >
+                  Close
+                </Button>
+          <Card className="bg-secondary shadow border-0">
+            <CardHeader className="bg-transparent pb-5">
+              <div className="text-muted text-center mt-2 mb-4">
+                <small>Sign up with</small>
+              </div>
+              <div className="text-center">
+                <Button
+                  className="btn-neutral btn-icon mr-4"
+                  color="default"
+                  href="#pablo"
+                  onClick={e => e.preventDefault()}
+                >
+                  <span className="btn-inner--icon">
+                    {/* <img
+                      alt="..."
+                      src={require("assets/img/icons/common/github.svg")}
+                    /> */}
+                  </span>
+                  <span className="btn-inner--text">Github</span>
+                </Button>
+                <Button
+                  className="btn-neutral btn-icon"
+                  color="default"
+                  href="#pablo"
+                  onClick={e => e.preventDefault()}
+                >
+                  <span className="btn-inner--icon">
+                   {/*  <img
+                      alt="..."
+                      src={require("assets/img/icons/common/google.svg")}
+                    /> */}
+                  </span>
+                  <span className="btn-inner--text">Google</span>
+                </Button>
+              </div>
+            </CardHeader>
+            <CardBody className="px-lg-5 py-lg-5">
+              <div className="text-center text-muted mb-4">
+                <small>Or sign up with credentials</small>
+              </div>
+              <Form role="form">
+                <FormGroup>
+                  <InputGroup className="input-group-alternative mb-3" style={{backgroundColor: '#B59CB8'}}>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-hat-3" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input placeholder="Name" type="text"  onChange={this.handleNameChange} />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative mb-3"   style={{backgroundColor: '#B59CB8'}}>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-email-83" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                     placeholder="Email"
+                      type="email"
+                       autoComplete="new-email"
+                    onChange={this.handleEmailChange}
+                 />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative" style={{backgroundColor: '#B59CB8'}}>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-lock-circle-open" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                     placeholder="Password"
+                     type="password" 
+                     autoComplete="new-password"
+                      onChange={this.handlePassWordChange}
+                      style={{color:"primary"}}/>
+                  </InputGroup>
+                </FormGroup>
+                <div className="text-muted font-italic">
+                  <small>
+                    password strength:{" "}
+                    <span className="text-success font-weight-700">strong</span>
+                  </small>
+                </div>
+                <Row className="my-4">
+                  <Col xs="12">
+                    <div className="custom-control custom-control-alternative custom-checkbox">
+                      <input
+                        className="custom-control-input"
+                        id="customCheckRegister"
+                        type="checkbox"
+                      />
+                      <label
+                        className="custom-control-label"
+                        htmlFor="customCheckRegister"
+                      >
+                        <span className="text-muted">
+                          I agree with the{" "}
+                          <a href="#pablo" onClick={e => e.preventDefault()}>
+                            Privacy Policy
+                          </a>
+                        </span>
+                      </label>
+                    </div>
+                  </Col>
+                </Row>
+                <div className="text-center">
+                  <Button className="mt-4" color="primary" type="button"
+                  onClick={this.userRegister} >
+                    Create account
+                  </Button>
+                </div>
+              </Form>
+            </CardBody>
+          </Card>
+       
+      </>
+      </Modal>
+      </Col>
+
+
+
 
 
 </React.Fragment>
