@@ -15,8 +15,12 @@ use Illuminate\Support\Facades\Log;
 */
 Route::get('/loginc', 'LoginControllers@postLogin');
 Route::post('/registerc', 'RegisterControllers@postRegister');
+Route::get('/libraryseats', 'LibrarySeatController@index');
+Route::get('/bookingseats', 'LibrarySeatController@AddBooking');
 Log::info("Api.php");
-
+Route::get('/login', array(
+    'uses' => 'LoginControllers@showLogin'
+  ));
 /* 
 Route::middleware('auth:api')->post('/login', function (Request $request) {
    // Route::post('api/login', 'Api\Login.php');

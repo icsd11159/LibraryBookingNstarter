@@ -23,7 +23,7 @@ import Signup from "../../../src/views/IndexSections/Signup.js";
 import ReactModal from "react-modal";
 import axios from "axios";
 import { useAlert } from 'react-alert'
-import { withAlert } from 'react-alert'
+
 // reactstrap components
 import {
   Button,
@@ -72,7 +72,7 @@ class ComponentsNavbar extends React.Component {
       Name:'',
       isRegisterModalOpen:false,
       Signin: true,
-      
+      isLoggedIn: false
     };
     this.handlePassWordChange= this.handlePassWordChange.bind(this);
     this.handleEmailChange= this.handleEmailChange.bind(this);
@@ -141,13 +141,20 @@ class ComponentsNavbar extends React.Component {
       params: { password: this.state.Password, email: this.state.Usermail}
     }).then((res) => {
       if(!res.data){
-     alert.error('You are succesfully loged in')
+     
+     console.log(res.data)
 
       }
       else{
         console.log(res.data)
-        alert.success('You are succesfully loged in')
-         this.setState({isModalOpen:false});
+
+        this.setState({isModalOpen:false,   collapseOpen: false , isLoggedIn: true });
+     
+        
+        this.props.handleLogin(true,this.state.Usermail);
+         
+       // alert.success('You are succesfully loged in')
+        
       }
     
     })
@@ -155,6 +162,7 @@ class ComponentsNavbar extends React.Component {
   .catch(function ($response) {
       //handle error
       console.log($response)
+     // this.props.handleLogin(false);
      
   });
   }
@@ -173,7 +181,7 @@ class ComponentsNavbar extends React.Component {
       data: { password: this.state.Password, email: this.state.Usermail, name:this.state.Name}
     }).then((res) => {
       console.log(res.data)
-     alert.success('You are succesfully registered')
+    // alert.success('You are succesfully registered')
 
       this.setState({isRegisterModalOpen:false});
     })
@@ -347,22 +355,27 @@ class ComponentsNavbar extends React.Component {
                 </DropdownMenu>
                
               </UncontrolledDropdown>
-              <NavItem>
+              <NavItem className="p-0">
               <Button color="primary"   /* to="register-page" tag={Link}  */
               onClick={this.openModal}
               >
                   Sign Up/Registers
                 </Button>
-                <Button
+               {/*  <Button
                   className="nav-link d-none d-lg-block"
                   color="default"
                   onClick={this.scrollToDownload}
                 >
                   <i className="tim-icons icon-cloud-download-93" /> Download
-                </Button>
-                
-              </NavItem>
+                </Button> */}
+                 {this.state.isLoggedIn && 
               
+              <span>{this.state.Usermail} </span>
+             
+            
+             }
+              </NavItem>
+            
             </Nav>
             
           </Collapse>

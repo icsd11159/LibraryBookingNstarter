@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Log;
 use App\Users;
 use App\Http\Controllers\Controller;
@@ -21,14 +21,14 @@ class LoginControllers extends Controller
         'password' => 'required',
       ]);
       $user = Users::where('password', $password)->where('email', $email)->exists();
-  
+
      // ->orderBy('created_at', 'desc')
      // ->withCount(['tasks' => function ($query) {
-     //   $query->where('is_completed', false);
-     // }])
-     
-    if( $user!=1){
-     Log::info( "Not Find the user!" );
+     //   $query->where('is_completed', false); 
+  
+   
+    if( $user!=1){ 
+  
      return false;
     }
     else{
@@ -40,6 +40,55 @@ class LoginControllers extends Controller
      
     }
    
-        
+  }  
+    
+    function showLogin()
+    {
+    // Form View
+    return view('login');
     }
+  public
+  function doLogout()
+    {
+    Auth::logout(); // logging out user
+    return Redirect::to('login'); // redirection to login screen
+    }
+  
+ /* public function doLogin()
+    {
+    // Creating Rules for Email and Password
+    $rules = array(
+      'email' => 'required|email', // make sure the email is an actual email
+      'password' => 'required|alphaNum|min:8'
+      // password has to be greater than 3 characters and can only be alphanumeric and);
+      // checking all field
+      $validator = Validator::make(Input::all() , $rules);
+      // if the validator fails, redirect back to the form
+      if ($validator->fails())
+        {
+        return Redirect::to('login')->withErrors($validator) // send back all errors to the login form
+        ->withInput(Input::except('password')); // send back the input (not the password) so that we can repopulate the form
+        }
+        else
+        {
+        // create our user data for the authentication
+        $userdata = array(
+          'email' => Input::get('email') ,
+          'password' => Input::get('password')
+        );
+        // attempt to do the login
+        if (Auth::attempt($userdata))
+          {
+          // validation successful
+          // do whatever you want on success
+          }
+          else
+          {
+          // validation not successful, send back to form
+          return Redirect::to('checklogin');
+          }
+        }
+      } */
+    
+    
 }

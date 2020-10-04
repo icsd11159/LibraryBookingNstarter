@@ -17,7 +17,8 @@
 */
 import React from "react";
 import classnames from "classnames";
-// reactstrap components
+/* import SeatPlan from "../../../../resources/js/components/SeatsSeats/SeatPlan.js"
+ */// reactstrap components
 import {
   TabContent,
   TabPane,
@@ -37,7 +38,9 @@ class Tabs extends React.Component {
     super(props);
     this.state = {
       iconTabs: 1,
-      textTabs: 4
+      textTabs: 4,
+      rowsSeat:[[{number:"T" , table:true, isReserved:true, orientation:false ,tooltip:"TABLE"}],
+      [{number:"T" , table:false, isReserved:true, orientation:false ,tooltip:"TABLE"}]] 
     };
   }
   toggleTabs = (e, stateName, index) => {
@@ -46,6 +49,29 @@ class Tabs extends React.Component {
       [stateName]: index
     });
   };
+  handleAddSeatPlan = (number) => {
+    console.log('We add a Passenger: ' + {number});
+    let $c=currentPassenger;
+    $c=$c+1;
+    let $add=$c;
+    setcurrentPassenger($add);
+    let $pasplan=passengersPlans;
+    $pasplan.push({number})
+    let $pas=$pasplan.filter(element => element && element.number);
+ 
+    setpassengersPlans($pas);
+ }
+handlRemoveSeatPlan =(number) => {
+   console.log('We premove a passenger: ' + {number});
+   let $c=currentPassenger;
+   $c=$c-1;
+   let $remove=$c;
+   setcurrentPassenger($remove);
+   let $pasplan=passengersPlans;
+   let $pas=$pasplan.filter(element => element.number && JSON.stringify(element.number)!== JSON.stringify(number));
+   setpassengersPlans($pas);
+  
+ }
   render() {
     return (
       <div className="section section-tabs">
@@ -71,6 +97,7 @@ class Tabs extends React.Component {
                         onClick={e => this.toggleTabs(e, "iconTabs", 1)}
                         href="#pablo"
                       >
+                        
                         <i className="tim-icons icon-spaceship" />
                         Profile
                       </NavLink>
@@ -112,8 +139,8 @@ class Tabs extends React.Component {
                         plug-and-play networks. Dynamically procrastinate B2C
                         users after installed base benefits. <br />
                         <br />
-                        Dramatically visualize customer directed convergence
-                        without revolutionary ROI.
+{/*                         <SeatPlan  rows={this.state.rowsSeat}  handleAddSeatPlan = {this.handleAddSeatPlan} handlRemoveSeatPlan={this.handlRemoveSeatPlan} numberOfPassengersPlannings={2} />
+ */}
                       </p>
                     </TabPane>
                     <TabPane tabId="link2">
