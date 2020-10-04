@@ -1,2 +1,2 @@
 # LibraryBookingNstarter
-Booking your seat to Stavros Niarchos Library
+Booking your seat to Library
