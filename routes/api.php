@@ -17,6 +17,10 @@ Route::get('/loginc', 'LoginControllers@postLogin');
 Route::post('/registerc', 'RegisterControllers@postRegister');
 Route::get('/libraryseats', 'LibrarySeatController@index');
 Route::get('/bookingseats', 'LibrarySeatController@AddBooking');
+Route::get('/checkins', 'CheckinController@getCheckin');
+Route::post('/checkins', 'CheckinController@postCheckin');
+
+
 Log::info("Api.php");
 Route::get('/login', array(
     'uses' => 'LoginControllers@showLogin'

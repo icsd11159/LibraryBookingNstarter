@@ -154,14 +154,14 @@ const SuccessModal = props => {
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
                     </InputGroupAddon>
-                    <input type="text" size ="40" name="details"  value={details} readOnly/>
+                    <input type="text"  name="details"  value={details} readOnly/>
                        </InputGroup>
                 </FormGroup>
                 <FormGroup className="mb-3">
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
                     </InputGroupAddon>
-                    <input type="text" size ="30" name="date"  value={date} readOnly/>
+                    <input type="hidden"  name="date"  value={date} readOnly/>
                        </InputGroup>
                 </FormGroup>
                 <FormGroup className="mb-3">

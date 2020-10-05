@@ -131,7 +131,7 @@
   <!-- Edit -->
   @if(isset($userData['edit']))
  
-  <form method='post' action='/save'>
+  <form method='post' action='/save'  ALIGN="center" >
    <table>
      <tr>
        <td colspan='2'><h1>  <a href='/deleteUser/{{ $userData['editData'][0]->id }}'>Delete</a> Or Edit record</h1></td>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Seat;
 use Illuminate\Support\Facades\Log;
 use App\Users;
+use App\Bookings;
 use Illuminate\Support\Facades\DB;
 class LibrarySeatController extends Controller
 {
@@ -61,13 +62,16 @@ class LibrarySeatController extends Controller
 
          // Update
          $value=Seat::updateData($editid, $data);
-       
+         $booking=Bookings::insertBookingData($data);
         }
          // if($value){
             $d= array('room_name'=>$room_name,"seat_number"=>$seat_number, "location"=>$location,
              "user_id"=>$user_id, "row"=>$row,  "tooltip"=>$tooltip, 
             "date"=>$date, "to_hour"=>$to_hour, "from_hour"=>$from_hour );
             Log::info(print_r( $d, true));
+
+            
+
             return  $d;
          // }else{
             //return false;

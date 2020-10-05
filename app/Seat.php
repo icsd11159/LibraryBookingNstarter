@@ -21,6 +21,17 @@ class Seat extends Model
       //  }
         return $value;
       }
+      public static function  getseatofUser($id){
+
+        // if($id==0){
+         //  $value=DB::table('libray_seat')->orderBy('id', 'asc')->get(); 
+        // }else{
+           $value['checkin']=DB::table('library_seat')->where('user_id', '=', $id)->select('room_name','seat_number','row','location','tooltip')->get();
+           Log::info(   $value['checkin']);
+       //  }
+         return  $value['checkin'];
+       }
+     
       public static function getseatOrofosData(){
 
         // if($id==0){
@@ -46,7 +57,11 @@ class Seat extends Model
        //  }
          return $value;
        }
-      
+      public static function getSeatId($seatname){
+        
+        $value=DB::table('library_seat')->where('seat_number', '=', $seatname)->value('id');
+        return $value;
+      }
        public static function insertData($data){
        $value=DB::table('library_seat')->get();
    
