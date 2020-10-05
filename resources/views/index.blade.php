@@ -1,5 +1,11 @@
 
 @extends('layouts.app')
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 @section('content')
 
@@ -35,7 +41,7 @@
      @endif
 
      <!-- Add/List records -->
-     <table border='1' style='border-collapse: collapse;'>
+     <table border='1' style='border-collapse: collapse;' ALIGN="center">
      @if(!isset($userData['edit']))
        <tr>
          <th>Room Id</th>
@@ -86,12 +92,12 @@
                                 @endforeach            
                             </select></td>
        
-         <td><input type='number' size="3"  name='row' value=" " required></td>
-         <td><input type='number' size="3" name='location' value=" " required></td>
+         <td><input type='number' min="1" max="5" style="width: 5em;" name='row' value=" " required></td>
+         <td><input type='number'min="1" max="5" style="width: 5em;" name='location' value=" " required></td>
          <td><input type='text'  name='tooltip' placeholder="p.x.table" ></td>
          <td><input type='date' name='date' value=" "></td>
-         <td><input type='time' name='from_hour' value=" " ></td>
-         <td><input type='time' name='to_hour' value=" "></td>
+         <td><input type='time'size='4' name='from_hour' value=" " ></td>
+         <td><input type='time' size='4' name='to_hour' value=" "></td>
          <td><input type='submit' name='submit' value='Add'></td>
        </tr>
        @endif
@@ -115,7 +121,7 @@
          <td>{{ $user->date }}</td>
          <td>{{ $user->from_hour }}</td>
          <td>{{ $user->to_hour }}</td>
-         <td><a href='editUser/{{ $user->id }}'>Update</a> <a href='/deleteUser/{{ $user->id }}'>Delete</a></td>
+         <td height="30"><a href='editUser/{{ $user->id }}'>Update/Delete</a> </td>
        </tr>
        @endforeach
     </table>
@@ -124,16 +130,17 @@
   
   <!-- Edit -->
   @if(isset($userData['edit']))
+ 
   <form method='post' action='/save'>
    <table>
      <tr>
-       <td colspan='2'><h1>Edit record</h1></td>
+       <td colspan='2'><h1>  <a href='/deleteUser/{{ $userData['editData'][0]->id }}'>Delete</a> Or Edit record</h1></td>
      </tr>
      <tr>
        <td colspan="2">{{ csrf_field() }}</td>
      </tr>
      <tr>
-       <td>Room Name/td>
+       <td>Room Name</td>
   
        <td  class = "select" > 
          <select name="room_name" id="room_name">
@@ -175,7 +182,8 @@
        <td  class = "select" > 
          <select name="user_id" id="user_id">
                          @foreach($userData['userData'] as $userD)
-                                <option value="{{$userD->name}}" @if($userData["editData"][0]->user_id == $userD->name) selected @endif >{{$userD->name}}</option>
+                                
+                                <option value="{{$userD->name}}" @if($userData["editData"][0]->user_id == $userD->id) selected @endif >{{$userD->name}}</option>
                              
                                 @endforeach            
                             </select></td>
@@ -204,19 +212,64 @@
        <td>To(hour)</td>
        <td><input type='time' name='to_hour' id='to_hour' value='{{ $userData["editData"][0]->to_hour }}' ></td>
      </tr>
-
-
      <tr>
        <td>&nbsp;<input type='hidden' value='{{ $userData["edit"] }}' name='editid'></td>
        <td><input type='submit' name='submit' value='Submit'></td>
      </tr>
    </table>
   </form>
- 
+  @if($userData["editData"][0]->reserved  == 1)
+  <div class="container">
+        <h3>If there are changes we have to Inform the User who had make the reservation</h3>
+          <span class="success" style="color:green; margin-top:10px; margin-bottom: 10px;"></span>
+        <form id="ajaxform">
+            <div class="form-group">
+                <label>Email To User:</label>
+                <input type="email" name="email" class="form-control"  value='{{$userData["userMail"]}}'  readonly>
+            </div>
 
+            
+            <div class="form-group">
+                <strong>Message:</strong>
+                <input type="text" name="message" class="form-control"  Placeholder="The value :[] has changed" required="">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success save-data">Send the mail</button>
+            </div>
+        </form>
+    </div>
+    @endif
   @endif
  </body>
+ <script>
 
+$(".save-data").click(function(event){
+    event.preventDefault();
+   
+   
+    let email = $("input[name=email]").val();
+    let message = $("input[name=message]").val();
+  
+    var data = {
+    service_id: 'BookingInfromGmail',
+    template_id: 'template_un8wsdh',
+    user_id: 'user_aMlscFw0hR9U6PRoOmNZb',
+    template_params: {
+        'email': email,
+        'message' : message
+    }
+};
+    $.ajax('https://api.emailjs.com/api/v1.0/email/send', {
+    type: 'POST',
+    data: JSON.stringify(data),
+    contentType: 'application/json'
+}).done(function() {
+    alert('Your mail is sent!');
+}).fail(function(error) {
+    alert('Oops... ' + JSON.stringify(error));
+});
+});
+</script>
 
 
 @endsection

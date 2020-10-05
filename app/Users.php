@@ -31,8 +31,16 @@ protected $casts = [
 public static function getUsers(){
 
     
-    $value=DB::table('users')->select('name')->get();
-    Log::info(print_r( $value, true));
+    $value=DB::table('users')->select('name','id')->get();
+   // Log::info(print_r( $value, true));
+
+ return $value;
+}
+public static function getUserMail($id){
+
+ 
+    $value=DB::table('users')->where('id',$id)->value('email');
+  
 
  return $value;
 }
@@ -40,7 +48,7 @@ public static function getUserId($name){
 
     
     $value=DB::table('users')->where('name',$name)->value('id');
-    Log::info(print_r( $value, true));
+   
 
  return $value;
 }

@@ -82,7 +82,8 @@ const SuccessModal = props => {
       
     const sendEmail=(e)=> {
         e.preventDefault();
-    
+        console.log("sendEmail");
+        console.log(e.target);
         emailjs.sendForm('BookingInfromGmail', 'template_un8wsdh',  e.target, 'user_aMlscFw0hR9U6PRoOmNZb')
           .then((result) => {
               console.log(result.text);

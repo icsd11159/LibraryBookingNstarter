@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Session;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Seat;
 use App\Users;
@@ -68,7 +69,8 @@ class SeatController extends Controller
      
                // Update
                Seat::updateData($editid, $data);
-    
+             
+             
                Session::flash('message','Update successfully.');
      
             //}
@@ -117,16 +119,18 @@ class SeatController extends Controller
           $userData['edit'] = $id;
           $userData['editData'] = Seat::getEditseatData($id);
           $userData['userData'] = Users::getUsers();
-          //Session::flash('message','Delete successfully.');
-          
+          $userData['userMail'] = Users::getUserMail($userData["editData"][0]->user_id);
+        
           return view('index')->with("userData",$userData);
       }
       public function deleteUser($id=0){
     
         if($id != 0){
           // Delete
+       
           Seat::deleteData($id);
-    
+          $reserved= DB::table('library_seat')->where('id',$id)->value('reserved'); 
+         
           Session::flash('message','Delete successfully.');
           
         }
