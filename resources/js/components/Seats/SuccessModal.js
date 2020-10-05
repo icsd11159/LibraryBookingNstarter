@@ -4,7 +4,7 @@ import moment, { isMoment } from "moment";
 import ReactDOM from "react-dom";
 import Tabs, { TabPane } from "rc-tabs";
 //import SingleDatePicker from "react-dates/lib/components/SingleDatePicker";
-
+import emailjs from 'emailjs-com';
 import DatePicker from "react-datepicker";
 import "react-dates/lib/css/_datepicker.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -56,6 +56,12 @@ const SuccessModal = props => {
 
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [fromName, setfromName] = useState(null);
+    const [sendSuccess, setfsendSuccess] = useState(false);
+    const [details, setdetails] = useState( Object.keys(bookingDetails).map((book,index)=>{
+      return book+":"+bookingDetails[book]+" "
+     }));
+     const [date, setBookDate] = useState(  "Extra check to the Date:"+":"+bookingDetails['date'] );
 
     useEffect(() => {  
        
@@ -74,7 +80,18 @@ const SuccessModal = props => {
    
       };
       
-
+    const sendEmail=(e)=> {
+        e.preventDefault();
+    
+        emailjs.sendForm('BookingInfromGmail', 'template_un8wsdh',  e.target, 'user_aMlscFw0hR9U6PRoOmNZb')
+          .then((result) => {
+              console.log(result.text);
+              setfsendSuccess(true);
+          }, (error) => {
+              console.log(error.text);
+          });
+          e.target.reset();
+      }
     return (
        
         <>
@@ -101,10 +118,27 @@ const SuccessModal = props => {
            </div>
            Αν θέλεις να αποσταλεί mail στους υπόλοιπους Αναγνώστες συμπλήρωσε τα στοιχεία τους
          
-           </form>
+         </form>
+        
+     
            </div>
               </div>
               <Form role="form">
+              <form className="contact-form" onSubmit={sendEmail}>
+                <FormGroup className="mb-3">
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                    </InputGroupAddon>
+                    <input type="text" name="to_name" placeholder="To Name" />
+                       </InputGroup>
+                </FormGroup>
+                <FormGroup className="mb-3">
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                    </InputGroupAddon>
+                    <input type="text" name="from_name" placeholder="From Name" />
+                       </InputGroup>
+                </FormGroup>
                 <FormGroup className="mb-3">
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
@@ -112,17 +146,40 @@ const SuccessModal = props => {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" autoComplete="new-email"/>
-                  </InputGroup>
+                    <input type="email" name="email" placeholder="EmailTo"  />
+                       </InputGroup>
                 </FormGroup>
-             
-              
-                <div className="text-center">
-                  <Button className="my-4" color="primary" type="button">
-                    Αποστολή Email
-                  </Button>
-                </div>
+                <FormGroup className="mb-3">
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                    </InputGroupAddon>
+                    <input type="text" size ="40" name="details"  value={details} readOnly/>
+                       </InputGroup>
+                </FormGroup>
+                <FormGroup className="mb-3">
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                    </InputGroupAddon>
+                    <input type="text" size ="30" name="date"  value={date} readOnly/>
+                       </InputGroup>
+                </FormGroup>
+                <FormGroup className="mb-3">
+                  <InputGroup className="input-group-alternative">
+                    <InputGroupAddon addonType="prepend">
+                    </InputGroupAddon>
+                    <input type="text" name="message" placeholder="Message" />
+                       </InputGroup>
+                </FormGroup>
+                <input type="submit" value="Send" />
+                 </form> 
               </Form>
+              {sendSuccess? 
+              <div className="text-center text-muted mb-4" color="primary">
+              <form className="form no-padding">
+              Το mail στάλθηκε με επιτυχία! 
+              </form>
+              </div>
+              :null}
             </CardBody>
           </Card>
         
