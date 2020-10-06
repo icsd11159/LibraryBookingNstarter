@@ -5,12 +5,22 @@ namespace App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+
+use Spatie\Permission\Traits\HasRoles;
 use App\Seat;
 class Bookings extends Model
 {
-    public function comments()
+    protected $fillable = ['date','from_hour','to_hour','checkin'];
+
+    protected $table = 'library_bookings';
+
+    public function seat()
     {
-        return $this->hasMany('App\Seat');
+        return $this->hasOne(Seat::class);
+    }
+    public function store()
+    {
+        return $this->belongsTo('App\Seat', 'seat_id', 'id');
     }
     public static function getBooking(){
 
@@ -22,46 +32,22 @@ class Bookings extends Model
        //  }
          return $value;
        }
-       public static function getBookingDateTime($date,$from_hour,$to_hour, $orofos){
-        $date=explode('T', $date, 2);
-        Log::info(   $date[0]  );
-           $value=DB::table('library_bookings')->where('date',$date[0])->where('checkin','1')->exists();
-         
-      
-       if( $value!=1){ 
-  
-        return 0;
-       }
-       else{
-        Log::info( " Find the exist!" );
-        $checkinid=DB::table('library_seat')->where('type','seat')->where('room_name',$orofos)->get();
-        $count=0;
-     //$comments =  App\Models\Post::find(1)->comments;
-        //App\Models\Post::find(1)->comments()->where('title', 'foo')->first();
-        foreach($checkinid as $chec){
-            $checkins=DB::table('library_bookings')->where('seat_id',$chec->id)->where('date',$date[0])->where('checkin','1')->exists();
-            if( $checkins==1){
-                $count++;
-            }
-        }
-        
-        $notcheckins=DB::table('library_seat')->where('type','seat')->where('room_name',$orofos)->count();
-        Log::info(   $count  );
-        Log::info(  $notcheckins  );
-       if($notcheckins>0){
-        $pososto=($count*100)/$notcheckins;
-       }else{
-        $pososto=false;
-       }
-      Log::info(  $pososto  );
-        return  $pososto;
-       }
-       
-       }
+
        public static function UpdateCheckin($id){
              $update=DB::table('library_bookings')->where('user_id',$id)->update(array('checkin' => '1'));  
              return $update;
        }
+       public static function SeatReserved($id,$date){
+        $isBooked=DB::table('library_bookings')->where('seat_id',$id)->where('date',$date)->exists();  
+     
+        if($isBooked==1){
+            return  1;
+        }
+        else{
+            return 0;
+        }
+      
+  }
        public static function insertBookingData($data){
              
           

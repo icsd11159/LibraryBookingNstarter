@@ -4,13 +4,24 @@ namespace App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use App\Bookings;
+
 class Seat extends Model
 {
+ 
+  protected $table = 'library_seat';
     protected $casts = [
         'reserved' => 'boolean',
         'orientation' => 'boolean'
     ];
+    protected $fillable = [
+      'room_name', 'seat_number', '	type', 'row', 'location', '	tooltip', 'date ', 'from_hour', 'to_hour', 'orientation'];
+    
     //
+    public function bookings()
+    {
+        return $this->hasMany('App\Bookings');
+    }
     public static function getseatData(){
 
        // if($id==0){
@@ -33,17 +44,18 @@ class Seat extends Model
        }
      
       public static function getseatOrofosData(){
-
-        // if($id==0){
-         //  $value=DB::table('libray_seat')->orderBy('id', 'asc')->get(); 
-        // }else{
+       
+       
           //Log::info(print_r( $orofos, true));
           $value['Ισόγειο']=DB::table('library_seat')->where('room_name','Ισόγειο')->get(); 
           $value['Όροφος1']=DB::table('library_seat')->where('room_name','Όροφος1')->get(); 
           $value['Όροφος2']=DB::table('library_seat')->where('room_name','Όροφος2')->get(); 
           $value['Όροφος3']=DB::table('library_seat')->where('room_name','Όροφος3')->get(); 
            Log::info(print_r(  $value, true));
-       //  }
+      
+   
+      
+      
          return $value;
        }
       

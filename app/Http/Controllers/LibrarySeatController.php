@@ -10,19 +10,27 @@ use App\Bookings;
 use Illuminate\Support\Facades\DB;
 class LibrarySeatController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
  
-       
+      $request_data=$request->all();
+      $date=$request_data['date'];
+      $date=explode('T', $date, 2)[0];
         $userData['data'] = Seat::getseatOrofosData();
+                              
+ 
+ 
         foreach(  $userData['data'] as $datas){
           foreach( $datas as $data){
-          
+        
           if($data->user_id!=null){
             $data->user_name = Users::getUserName($data->user_id);
-          }
+            $data->reserved  = Bookings::SeatReserved($data->id,$date);
+        
+          }                 
         }
         }
-      
+        Log::info( "userData['data']"  );
+        Log::info( $userData['data']  );
         return $userData['data'];
      
         

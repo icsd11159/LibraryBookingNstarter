@@ -127,13 +127,14 @@ class Index extends React.Component {
    // this.handleSubmit = this.handleSubmit.bind(this);
   }
   toggleTabs = (e, stateName, index ,orofos) => {
+    console.log(orofos)
     e.preventDefault();
     this.setState({
       [stateName]: index,
       orofos:orofos
-    });
-    {this.state.from_hour && this.state.to_hour && this.state.bookingDay &&(this.HasCheckins(),
-      this.handleGetSeat(this.state.responseSeat,moment(this.state.bookingDay)))};
+    },()=>{ {this.state.from_hour && this.state.to_hour && this.state.bookingDay &&(this.HasCheckins(),
+      this.handleGetSeat(this.state.responseSeat,moment(this.state.bookingDay)))};});
+   
 
     
   };
@@ -143,7 +144,9 @@ class Index extends React.Component {
     },()=>{
       console.log(this.state.bookingDay)
       {this.state.from_hour && this.state.to_hour && (this.HasCheckins(),
-      this.handleGetSeat(this.state.responseSeat,moment(this.state.bookingDay)))};
+      this.handleGetSeat(this.state.responseSeat,moment(date)))
+      this.seatLibrary();
+    };
 
   });
 }
@@ -187,7 +190,7 @@ class Index extends React.Component {
         if(!res.data){
        
        console.log(res.data)
-       this.setState({pososto_pl: "Η βιβλιοθήκη δεν είναι ανοιχτή προς το κοινο αυτή τη μέρα" });
+       this.setState({pososto_pl: " " });
         
         }
         else{
@@ -216,7 +219,7 @@ class Index extends React.Component {
   }
   seatLibrary = () =>{
     //const alert = useAlert();
-    
+    if(this.state.bookingDay){
       return axios({
         url:"api/libraryseats",
         method:"GET",
@@ -225,7 +228,7 @@ class Index extends React.Component {
           "Content-Type": "application/json",
           Accept: "application/json"
         },
-       // params: { orofos: orofos}
+        params: { date: this.state.bookingDay}
       }).then((res) => {
         if(!res.data){
        
@@ -237,9 +240,11 @@ class Index extends React.Component {
    
       // this.setState({rowsSeats:null } ,()=>{
           //  let orofos=[{'Ισόγειο':[],'Όροφος1':[],'Όροφος2':[],'Όροφος3':[]}];//
-          this.setState({rowsSeats:null,responseSeat:res.data });
+          this.setState({rowsSeats:null,responseSeat:res.data },()=>{
             let resp=res.data;
             this.handleGetSeat(resp,moment())
+          });
+            
          // }); 
 
           
@@ -255,6 +260,8 @@ class Index extends React.Component {
     });
     
    
+    }
+    
   }
   handleBookindSeats=(passengersPlans,bookingDay)=>{
     console.log("handleBookindSeats")
@@ -304,7 +311,7 @@ class Index extends React.Component {
       seatsl=[];
       
        resp[rows] && resp[rows].map((row,index)=>{
-      
+    
       let oneseat=null;
       if(row.type==="corridor"){
         oneseat=null;
@@ -315,22 +322,25 @@ class Index extends React.Component {
         let orientationn=false;
         let isReserved=false;
         
-        let tooltips=row.room_name+","+row.id+","+row.tooltip;
-    
+        let tooltips=row.room_name+","+row.seat_number+","+row.tooltip;
+        
           if(row.reverseOrientation===1){
            
             orientationn= true
           }
           console.log(date)
-
-         // console.log(moment(row.date))
-          if(row.reserved===1 && row.date &&  moment(row.date).isSame(date)){
-            
+        
+         //gia na mhn epilegei prohgoumenes meres
+          if(( row.date &&  moment(row.date).isSame(date)) || moment(row.date).isSameOrAfter(moment())){
+            if(parseInt(row.reserved)===1 ){
             isReserved= true
             tooltips=tooltips+":"+row.user_name;
           }else{
             tooltips=tooltips+", free"
           }
+        }else{
+          tooltips=tooltips+", free"
+        }
         oneseat={ number:row.seat_number , table:false ,id:num,  isReserved:isReserved , orientation:orientationn , tooltip:tooltips} 
         
         

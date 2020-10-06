@@ -57,8 +57,32 @@ class CheckinController extends Controller
     $date = $request_data['date'];
     $from_hour = $request_data['from_hour'];
     $to_hour = $request_data['to_hour'];
-    $orofos = $request_data['orofos'];
-    $bookingDatae=Bookings::getBookingDateTime($date,$from_hour,$to_hour,$orofos);
-    return $bookingDatae;
+    $orofos= $request_data['orofos'];
+    $date=explode('T', $date, 2)[0];
+    Log::info(   $date  );
+    Log::info(  $orofos );
+
+
+   $seat=Seat::with('bookings')->where('room_name', '=', $orofos)->where('type', '=', 'seat')->get(); //epeidi exei hasMany
+
+
+   //Log::info(  $seat  );
+
+     $count=0;
+   foreach($seat as $s){
+     $count=$count+$s->bookings->where('checkin','1')->where('date',  $date)->count(); 
+    }
+
+    //Log::info(  $count  ); 
+    $notcheckins=DB::table('library_seat')->where('type','seat')->where('room_name',  $orofos)->count(); 
+
+  //Log::info(  $notcheckins  );
+   if($notcheckins>0){
+    $pososto=($count*100)/$notcheckins;
+   }else{
+     $pososto=false;
+   }
+  //Log::info(  $pososto  );
+   return $pososto;
   }
 }

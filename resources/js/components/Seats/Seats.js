@@ -17,6 +17,7 @@ import SeatPlan from "./SeatPlan";
 import ReactModal from "react-modal";
 import { Button } from "reactstrap";
 import Examples from "../../../../src/views/IndexSections/Examples";
+import { set } from "lodash";
 // helpers/api/constants/config
 
 const Seats = props => {
@@ -32,6 +33,10 @@ const Seats = props => {
     const { orofos } = props;
     const [currentPassenger, setcurrentPassenger] = useState(0);
     const [passengersPlans, setpassengersPlans] = useState([]);
+    const [rowsSeat, setrowsSeats] = useState([]);
+    useEffect(() => {
+        setrowsSeats(rowsSeats);
+      }, [rowsSeats]);
     const isDayBlocked = day => {
         //  if (Settings.role === "b2c") {
         return false;
@@ -117,31 +122,29 @@ const Seats = props => {
                       
                     </div>
                 ) }
-            {rowsSeats && rowsSeats[orofos] && (
+            {rowsSeat && rowsSeat[orofos] && (
                 <SeatPlan
-                    rows={rowsSeats[orofos]}
+                    rows={rowsSeat[orofos]}
                     handleAddSeatPlan={handleAddSeatPlan}
                     handlRemoveSeatPlan={handlRemoveSeatPlan}
                     numberOfPassengersPlannings={2}
                 />
             )}
           
-            {rowsSeats && rowsSeats[orofos] && (
+        
                 <DatePicker
                     selected={bookingDay}
                     onChange={date => handleDateChange(date)}
                 />
-            )}
+          
            
-            {rowsSeats && rowsSeats[orofos] && (
                 
                 <TimePicker onChange={time => onTimeChange(time)} value={from_hour}  />
-            )}
+        
            
-            {rowsSeats && rowsSeats[orofos] && (
+           
                 <TimePicker onChange={time => onTimeToChange(time) } value={to_hour} />
-            )}
-              {rowsSeats && rowsSeats[orofos] && (<div>Επιλέξτε Ημερομηνία και Ώρα από-προς</div>)}
+                <div>Επιλέξτε Ημερομηνία και Ώρα από-προς</div>
         </div>
     );
 };
