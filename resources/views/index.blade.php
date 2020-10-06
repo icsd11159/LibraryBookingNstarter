@@ -24,7 +24,8 @@
 
                     You are logged in!
 
-                    <td height="30" ><a href='/booking'>Go To Bookings</a> </td>
+                    <td height="30" ><a href='/booking'>Go To Bookings Managment</a> </td>
+                    <td height="30" ><a href='/user'>Go To Users Managment</a> </td>
                 </div>
             </div>
         </div>

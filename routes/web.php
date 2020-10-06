@@ -27,9 +27,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/deleteBookings/{id}', 'BookingController@deleteBookings');
   //  Route::get('/{id}', 'SeatController@index');
   Route::post('/save', 'SeatController@save');
+  Route::post('/saveUser', 'UserController@saveUser');
   Route::post('/saveBooking', 'SeatController@saveBooking');
   Route::get('/booking', 'BookingController@index');
     Route::get('/deleteUser/{id}', 'SeatController@deleteUser');
+    Route::get('/deleteUser/{id}', 'UserController@userBookings');
+    Route::get('/editUser/{id}', 'UserController@editUser');
+    Route::get('/user', 'UserController@index');
 });
 Route::view('/{path?}', 'app');
 
@@ -54,9 +58,15 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/editUser/{id}', 'SeatController@editUser');
     Route::get('/editBookings/{id}', 'BookingController@editBookings');
     Route::post('/saveBookings', 'BookingController@saveBookings');
-  Route::get('/booking', 'BookingController@index');
+    Route::get('/booking', 'BookingController@index');
+
+  Route::get('/deleteUser/{id}', 'UserController@userBookings');
+  Route::get('/editUser/{id}', 'UserController@editUser');
+  Route::post('/saveuser', 'UserController@saveUser');
+  Route::get('/user', 'UserController@index');
+
 });
-Route::prefix(config('/manager'))->group(function () {
+/* Route::prefix(config('/manager'))->group(function () {
     Auth::routes();
    
     //Route::get('/home', 'HomeController@index')->name('home');
@@ -64,7 +74,7 @@ Route::prefix(config('/manager'))->group(function () {
     //  Route::get('/{id}', 'SeatController@index');
       Route::post('/save', 'SeatController@save');
       Route::get('/deleteUser/{id}', 'SeatController@deleteUser');
-});
+}); */
 //Route::prefix(config('app'))->group(function () {
     // Auth Routes
   //  Auth::routes();

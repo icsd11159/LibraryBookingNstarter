@@ -36,6 +36,22 @@ public static function getUsers(){
 
  return $value;
 }
+public static function getUsersAll(){
+
+    
+    $value=DB::table('users')->get();
+   // Log::info(print_r( $value, true));
+
+ return $value;
+}
+public static function getUsersData($id){
+
+    
+    $value=DB::table('users')->where('id',$id)->get();
+   // Log::info(print_r( $value, true));
+
+ return $value;
+}
 public static function getUserMail($id){
 
  
@@ -60,5 +76,26 @@ public static function getUserName($id){
 
  return $value;
 }
+public static function insertData($data){
+    $value=DB::table('users')->get();
+
+  // if($value->count() == 0){
+     Log::info(print_r( $data, true));
+       DB::table('users')->insert($data);
+       return 1;
+    //  }else{
+      //  return 0;
+     // }
+  
+   } 
+public static function updateData($id,$data){
+    DB::table('users')
+      ->where('id', $id)
+      ->update($data);
+  }
+
+  public static function deleteData($id){
+    DB::table('users')->where('id', '=', $id)->delete();
+  }
 
 }
