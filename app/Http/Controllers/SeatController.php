@@ -120,6 +120,7 @@ class SeatController extends Controller
           $userData['editData'] = Seat::getEditseatData($id);
           $userData['userData'] = Users::getUsers();
           $userData['userMail'] = Users::getUserMail($userData["editData"][0]->user_id);
+          $userData['editBookingData'] = Users::getUserMail($userData["editData"][0]->user_id);
         
           return view('index')->with("userData",$userData);
       }

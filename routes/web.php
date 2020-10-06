@@ -23,8 +23,12 @@ Route::group(['middleware' => ['auth']], function() {
    // Route::get('/home', 'HomeController@index')->name('home');
 
     Route::get('/home', 'SeatController@index');
+   
+    Route::get('/deleteBookings/{id}', 'BookingController@deleteBookings');
   //  Route::get('/{id}', 'SeatController@index');
-    Route::post('/save', 'SeatController@save');
+  Route::post('/save', 'SeatController@save');
+  Route::post('/saveBooking', 'SeatController@saveBooking');
+  Route::get('/booking', 'BookingController@index');
     Route::get('/deleteUser/{id}', 'SeatController@deleteUser');
 });
 Route::view('/{path?}', 'app');
@@ -46,7 +50,11 @@ Route::group(['middleware' => ['auth']], function() {
   //  Route::get('/{id}', 'SeatController@index');
     Route::post('/save', 'SeatController@save');
     Route::get('/deleteUser/{id}', 'SeatController@deleteUser');
+    Route::get('/deleteBookings/{id}', 'BookingController@deleteBookings');
     Route::get('/editUser/{id}', 'SeatController@editUser');
+    Route::get('/editBookings/{id}', 'BookingController@editBookings');
+    Route::post('/saveBookings', 'BookingController@saveBookings');
+  Route::get('/booking', 'BookingController@index');
 });
 Route::prefix(config('/manager'))->group(function () {
     Auth::routes();

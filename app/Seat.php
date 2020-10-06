@@ -69,6 +69,17 @@ class Seat extends Model
        //  }
          return $value;
        }
+        
+      public static function getEditBookseatData($id){
+
+        // if($id==0){
+         //  $value=DB::table('libray_seat')->orderBy('id', 'asc')->get(); 
+        // }else{
+            $value=DB::table('library_seat')->where('id', '=', $id)->value('id');
+            Log::info(print_r( $value, true));
+       //  }
+         return $value;
+       }
       public static function getSeatId($seatname){
         
         $value=DB::table('library_seat')->where('seat_number', '=', $seatname)->value('id');

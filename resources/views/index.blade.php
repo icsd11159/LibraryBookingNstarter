@@ -24,7 +24,7 @@
 
                     You are logged in!
 
-                    
+                    <td height="30" ><a href='/booking'>Go To Bookings</a> </td>
                 </div>
             </div>
         </div>
@@ -39,8 +39,8 @@
      @if(Session::has('message'))
        <p >{{ Session::get('message') }}</p>
      @endif
-
-     <!-- Add/List records -->
+     
+     <!-- Add/Seats records -->
      <table border='1' style='border-collapse: collapse;' ALIGN="center">
      @if(!isset($userData['edit']))
        <tr>

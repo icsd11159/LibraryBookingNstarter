@@ -48,6 +48,18 @@ class Bookings extends Model
         }
       
   }
+
+          public static function getBookingsData($id){
+
+            // if($id==0){
+             //  $value=DB::table('libray_seat')->orderBy('id', 'asc')->get(); 
+            // }else{
+                
+                $value=DB::table('library_bookings')->where('id', '=', $id)->get();
+                Log::info(print_r( $value, true));
+           //  }
+             return $value;
+           }
        public static function insertBookingData($data){
              
           
@@ -76,4 +88,25 @@ class Bookings extends Model
       
       
        } 
+       public static function insertData($data){
+        $value=DB::table('library_bookings')->get();
+    
+      // if($value->count() == 0){
+         Log::info(print_r( $data, true));
+           DB::table('library_bookings')->insert($data);
+           return 1;
+        //  }else{
+          //  return 0;
+         // }
+      
+       } 
+       public static function updateData($id,$data){
+        DB::table('library_bookings')
+          ->where('id', $id)
+          ->update($data);
+      }
+    
+      public static function deleteData($id){
+        DB::table('library_bookings')->where('id', '=', $id)->delete();
+      }
 }
