@@ -29,7 +29,7 @@ const Seats = props => {
         onTimeChange,
         onTimeToChange
     } = store.methods;
-    const { rowsSeats, bookingDay, pososto_pl,Bookingfind,from_hour,to_hour } = store.state;
+    const { rowsSeats, bookingDay, pososto_pl,Bookingfind,from_hour,to_hour,isLoggein } = store.state;
     const { orofos } = props;
     const [currentPassenger, setcurrentPassenger] = useState(0);
     const [passengersPlans, setpassengersPlans] = useState([]);
@@ -95,7 +95,7 @@ const Seats = props => {
                 >
                    Εμφάνιση Θέσεων
                 </button>
-                {(bookingDay && passengersPlans && passengersPlans[0])  ? (
+                {(bookingDay && passengersPlans && passengersPlans[0]) && isLoggein ? (
                     <button
                         type="button"
                         className="btn-round"

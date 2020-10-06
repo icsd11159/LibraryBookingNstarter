@@ -455,7 +455,7 @@ class Index extends React.Component {
                this.state.bookingDetails  ?
                 <SuccessModal />
                   :null }
-            <Col className="ml-auto mr-auto" md="40" xl="8" >
+            <Col className="ml-auto mr-auto" md="30" xl="6" >
               <div className="mb-2">
                 <small className="text-uppercase font-weight-bold">
                   Επιλέξτε Ημερομηνία και Θέση κράτησης
