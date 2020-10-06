@@ -110,7 +110,11 @@ class Index extends React.Component {
       currentYear:null,
       username: null,
       bookingSuccess:false,
-      bookingDetails:null
+      bookingDetails:null,
+      pososto_pl: null,
+      from_hour:'10:00',
+      to_hour:'11:00',
+      orofos: 'Ισόγειο'
  
   /*   rowsSeat:[[{number:'1A' , table:false, isReserved:false, orientation:true ,tooltip:"1A"},{number:"1B" , table:true, isReserved:false, orientation:false ,tooltip:"TABLE"}],
   [{number:"T" , table:false, isReserved:false, orientation:false ,tooltip:"TABLE"}],
@@ -122,20 +126,94 @@ class Index extends React.Component {
    this.handleKrathseis = this.handleKrathseis.bind(this);
    // this.handleSubmit = this.handleSubmit.bind(this);
   }
-  toggleTabs = (e, stateName, index) => {
+  toggleTabs = (e, stateName, index ,orofos) => {
     e.preventDefault();
     this.setState({
-      [stateName]: index
+      [stateName]: index,
+      orofos:orofos
     });
+    {this.state.from_hour && this.state.to_hour && this.state.bookingDay &&(this.HasCheckins(),
+      this.handleGetSeat(this.state.responseSeat,moment(this.state.bookingDay)))};
+
+    
   };
   handleDateChange = date => {
     this.setState({
       bookingDay: date
     },()=>{
       console.log(this.state.bookingDay)
-      this.handleGetSeat(this.state.responseSeat,moment(this.state.bookingDay))});
+      {this.state.from_hour && this.state.to_hour && (this.HasCheckins(),
+      this.handleGetSeat(this.state.responseSeat,moment(this.state.bookingDay)))};
+
+  });
+}
+
+  onTimeChange= time => {
+    this.setState({
+      from_hour: time
+    },()=>{
+      console.log(time)
+      {this.state.bookingDay && this.state.to_hour &&( this.HasCheckins(),
+      this.handleGetSeat(this.state.responseSeat,moment(this.state.bookingDay)))};
+
+    });
+  }
+  onTimeToChange= time => {
+    this.setState({
+      to_hour: time
+    },()=>{
+      console.log(time)
+      {this.state.from_hour && this.state.bookingDay &&(
+        this.HasCheckins(),
+        this.handleGetSeat(this.state.responseSeat,moment(this.state.bookingDay)))};
+   
+    })
 
   };
+  
+  HasCheckins = () =>{
+    //const alert = useAlert();
+  
+      return axios({
+        url:"api/hascheckins",
+        method:"GET",
+        header:{
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        params: { date: this.state.bookingDay ,from_hour : this.state.from_hour, to_hour :this.state.to_hour , orofos:this.state.orofos}
+      }).then((res) => {
+        if(!res.data){
+       
+       console.log(res.data)
+       this.setState({pososto_pl: "Η βιβλιοθήκη δεν είναι ανοιχτή προς το κοινο αυτή τη μέρα" });
+        
+        }
+        else{
+          console.log("pososto")
+          console.log(res.data)
+   
+      // this.setState({rowsSeats:null } ,()=>{
+          //  let orofos=[{'Ισόγειο':[],'Όροφος1':[],'Όροφος2':[],'Όροφος3':[]}];//
+          this.setState({pososto_pl: "Ο χώρος είναι πλήρης κατά "+ res.data.toFixed(2) +"% με βάση τα check In των Επισκεπτών"});
+       
+         // }); 
+
+          
+        }
+      
+      })
+    
+    .catch(function ($response) {
+        //handle error
+        console.log($response)
+       // this.props.handleLogin(false);
+       
+    });
+    
+   
+  }
   seatLibrary = () =>{
     //const alert = useAlert();
     
@@ -190,7 +268,7 @@ class Index extends React.Component {
         "Content-Type": "application/json",
         Accept: "application/json"
       },
-     params: { date: bookingDay, seats:passengersPlans, username:this.state.username , from_hour:"10:57:00"  , to_hour:"11:57:00" }
+     params: { date: bookingDay, seats:passengersPlans, username:this.state.username , from_hour:this.state.from_hour  , to_hour:this.state.to_hour}
     }).then((res) => {
       if(!res.data){
      
@@ -204,7 +282,7 @@ class Index extends React.Component {
         //  let orofos=[{'Ισόγειο':[],'Όροφος1':[],'Όροφος2':[],'Όροφος3':[]}];//
          this.setState({bookingSuccess:true,bookingDetails:res.data})
        // }); 
-
+        
         
       }
     
@@ -276,44 +354,11 @@ class Index extends React.Component {
     console.log(this.state.rowsSeats);
   }
   handleGetLibrarySeat = (orofos) =>{
+
     console.log("orofos");
     console.log(orofos);
    this.seatLibrary();
   }
-  handleAddSeatPlan = (number) => {
-    console.log('We add a Passenger: ' + {number});
-   /*  let $c=1;//currentPassenger
-    $c=$c+1;
-    let $add=$c;
-    //setcurrentPassenger($add);
-    let $pasplan=passengersPlans;
-    $pasplan.push({number})
-    let $pas=$pasplan.filter(element => element && element.number); */
- 
-   // setpassengersPlans($pas);
- }
-handlRemoveSeatPlan =(number) => {
-   console.log('We premove a passenger: ' + {number});
-  /*  let $c=2; //currentPassenger
-   $c=$c-1;
-   let $remove=$c;
-  // setcurrentPassenger($remove);
-   let $pasplan=passengersPlans;
-   let $pas=$pasplan.filter(element => element.number && JSON.stringify(element.number)!== JSON.stringify(number)); */
-   //setpassengersPlans($pas);
-  
- }
- handlRemoveSeatPlans =() => {
-  console.log('We premove a passenger: ' + {number});
- /*  let $c=2; //currentPassenger
-  $c=$c-1;
-  let $remove=$c;
- // setcurrentPassenger($remove);
-  let $pasplan=passengersPlans;
-  let $pas=$pasplan.filter(element => element.number && JSON.stringify(element.number)!== JSON.stringify(number)); */
-  //setpassengersPlans($pas);
- 
-}
 
   componentDidMount() {
     document.body.classList.toggle("index-page");
@@ -325,7 +370,7 @@ handlRemoveSeatPlan =(number) => {
   handleLogin = (log,username)=>{
     this.state.isLoggein = log;
     this.state.username = username;
-    console.log(log);
+    console.log(username);
   //  this.onShowAlert();
   }
   onShowAlert = ()=>{
@@ -362,7 +407,9 @@ handlRemoveSeatPlan =(number) => {
             methods: {
               handleGetLibrarySeat: this.handleGetLibrarySeat,
               handleDateChange:this.handleDateChange,
-              handleBookindSeats:this.handleBookindSeats
+              handleBookindSeats:this.handleBookindSeats,
+              onTimeChange:this.onTimeChange,
+              onTimeToChange:this.onTimeToChange
              
             } 
           }}
@@ -383,22 +430,7 @@ handlRemoveSeatPlan =(number) => {
        
           <PageHeader />
          
-         {/*    <Basics /> 
-          <Navbars  handleKrathseis={this.handleKrathseis}/>
-              {this.state.menunumber===0 ?<Tabs />:null}  */}
-           {/*<Pagination />
-            <Notifications />
-            <Typography />
-            <JavaScript />
-            <NucleoIcons />
-           
-            <Examples /> */}
-        {/*     <Download />  */}
-          
-   
-           {/*  <div style={{marginLeft: '70px'}}>
-            <SeatPlan  rows={this.state.rowsSeat}  handleAddSeatPlan = {this.handleAddSeatPlan} handlRemoveSeatPlan={this.handlRemoveSeatPlan} numberOfPassengersPlannings={2} />
-            </div> */} 
+      
             <div className="section section-tabs">
         <Container>
           <div className="title">
@@ -413,8 +445,8 @@ handlRemoveSeatPlan =(number) => {
                this.state.bookingDetails  ?
                 <SuccessModal />
                   :null }
-            <Col className="ml-auto mr-auto" md="10" xl="6">
-              <div className="mb-3">
+            <Col className="ml-auto mr-auto" md="40" xl="8" >
+              <div className="mb-2">
                 <small className="text-uppercase font-weight-bold">
                   Επιλέξτε Ημερομηνία και Θέση κράτησης
                 </small>
@@ -427,7 +459,7 @@ handlRemoveSeatPlan =(number) => {
                         className={classnames({
                           active: this.state.textTabs === 4
                         })}
-                        onClick={e => this.toggleTabs(e, "textTabs", 4)}
+                        onClick={e => this.toggleTabs(e, "textTabs", 4 , 'Ισόγειο')}
                         href="#pablo"
                       >
                         Ισόγειο
@@ -438,7 +470,7 @@ handlRemoveSeatPlan =(number) => {
                         className={classnames({
                           active: this.state.textTabs === 5
                         })}
-                        onClick={e => this.toggleTabs(e, "textTabs", 5)}
+                        onClick={e => this.toggleTabs(e, "textTabs", 5, 'Όροφος1')}
                         href="#pablo"
                       >
                         1ος Όροφος
@@ -449,7 +481,7 @@ handlRemoveSeatPlan =(number) => {
                         className={classnames({
                           active: this.state.textTabs === 6
                         })}
-                        onClick={e => this.toggleTabs(e, "textTabs", 6)}
+                        onClick={e => this.toggleTabs(e, "textTabs", 6 , 'Όροφος2')}
                         href="#pablo"
                       >
                         2ος Όροφος
@@ -460,7 +492,7 @@ handlRemoveSeatPlan =(number) => {
                         className={classnames({
                           active: this.state.textTabs === 7
                         })}
-                        onClick={e => this.toggleTabs(e, "textTabs", 7)}
+                        onClick={e => this.toggleTabs(e, "textTabs", 7, 'Όροφος3')}
                         href="#pablo"
                       >
                         3ος Όροφος
@@ -473,31 +505,31 @@ handlRemoveSeatPlan =(number) => {
                     className="tab-space"
                     activeTab={"link" + this.state.textTabs}
                   >
-                    <TabPane tabId="link4">
+                    <TabPane tabId="link4" >
                   
-                   {this.state.isLoggein ?
+                  
                    <Seats orofos={'Ισόγειο'}/>
-                  :null }
+               
                     </TabPane>
                     <TabPane tabId="link5">
                       
-                      {this.state.isLoggein ?
+                      
                       <Seats orofos={'Όροφος1'}/>
-                      :null }
+              
                       
                     </TabPane>
-                    <TabPane tabId="link6">
+                    <TabPane tabId="link6"  >
                      
-                      {this.state.isLoggein ?
+                     
                       <Seats orofos={'Όροφος2'}/>
-                      :null }
+                 
                       
                     </TabPane>
                     <TabPane tabId="link7">
                       
-                      {this.state.isLoggein ?
+                
                       <Seats orofos={'Όροφος3'}/>
-                      :null }
+                  
                      
                     </TabPane>
                   </TabContent>

@@ -8,7 +8,7 @@ import Tabs, { TabPane } from "rc-tabs";
 import DatePicker from "react-datepicker";
 import "react-dates/lib/css/_datepicker.css";
 import "react-datepicker/dist/react-datepicker.css";
-
+import TimePicker from "react-time-picker";
 import AppContext from "../../services/context";
 // components
 
@@ -21,16 +21,22 @@ import Examples from "../../../../src/views/IndexSections/Examples";
 
 const Seats = props => {
     const store = useContext(AppContext);
-    const { handleGetLibrarySeat,handleDateChange, handleBookindSeats} = store.methods;
-    const { rowsSeats,  bookingDay } = store.state;
+    const {
+        handleGetLibrarySeat,
+        handleDateChange,
+        handleBookindSeats,
+        onTimeChange,
+        onTimeToChange
+    } = store.methods;
+    const { rowsSeats, bookingDay, pososto_pl,Bookingfind,from_hour,to_hour } = store.state;
     const { orofos } = props;
     const [currentPassenger, setcurrentPassenger] = useState(0);
     const [passengersPlans, setpassengersPlans] = useState([]);
     const isDayBlocked = day => {
-    //  if (Settings.role === "b2c") {
+        //  if (Settings.role === "b2c") {
         return false;
-     // } else {
-      /*   if (!selectOnlyDirectRoutes) return false
+        // } else {
+        /*   if (!selectOnlyDirectRoutes) return false
   
         return focused === "startDate"
           ?travelToEligibleDates && !getcurrent(travelToEligibleDates).some(date => moment(day).isSame(date, "day"))
@@ -39,7 +45,7 @@ const Seats = props => {
             );
       } */
     };
-    
+
     const handleAddSeatPlan = number => {
         console.log("We add a Passenger: " + { number });
         let $c = currentPassenger;
@@ -48,9 +54,9 @@ const Seats = props => {
         setcurrentPassenger($add);
         let $pasplan = passengersPlans;
         $pasplan.push({ number });
-     let $pas = $pasplan.filter(element => element && element.number);
+        let $pas = $pasplan.filter(element => element && element.number);
         console.log($pasplan);
-        
+
         setpassengersPlans($pas);
     };
 
@@ -61,19 +67,16 @@ const Seats = props => {
         let $remove = $c;
         setcurrentPassenger($remove);
         let $pasplan = passengersPlans;
-     let $pas = $pasplan.filter(
+        let $pas = $pasplan.filter(
             element =>
                 element.number &&
                 JSON.stringify(element.number) !== JSON.stringify(number)
-        ); 
+        );
         setpassengersPlans($pas);
     };
- 
-
-
-   
 
     return (
+       
         <div>
             <span>
                 <button
@@ -85,39 +88,60 @@ const Seats = props => {
                         orofos ? handleGetLibrarySeat(orofos) : null;
                     }}
                 >
-                    Επιλογή Θέσεων
+                   Εμφάνιση Θέσεων
                 </button>
-                {bookingDay && passengersPlans && passengersPlans[0] &&(
-                <button
-                    type="button"
-                    className="btn-round"
-                    color="primary"
-                    size="lg"
-                    onClick={() => {
-                        orofos ? handleBookindSeats(passengersPlans,moment(bookingDay).format("YYYY-MM-DD")) : null;
-                    }}
-                >
-                    Κράτηση Θέσεων
-                </button>
-                )}
+                {(bookingDay && passengersPlans && passengersPlans[0])  ? (
+                    <button
+                        type="button"
+                        className="btn-round"
+                        color="primary"
+                        size="lg"
+                        onClick={() => {
+                            orofos
+                                ? handleBookindSeats(
+                                      passengersPlans,
+                                      moment(bookingDay).format("YYYY-MM-DD")
+                                  )
+                                : null;
+                        }}
+                    >
+                        Κράτηση Θέσεων
+                    </button>
+                ):<div>Πρέπει να συνδεθείτε για να κάνετε κράτηση</div>}
             </span>
-
+            {rowsSeats &&
+                rowsSeats[orofos] &&
+                (
+                    <div>
+                      {pososto_pl} 
+                      
+                    </div>
+                ) }
             {rowsSeats && rowsSeats[orofos] && (
-            
-                    <SeatPlan
-                        rows={rowsSeats[orofos]}
-                        handleAddSeatPlan={handleAddSeatPlan}
-                        handlRemoveSeatPlan={handlRemoveSeatPlan}
-                        numberOfPassengersPlannings={2}
-                    />
-              
+                <SeatPlan
+                    rows={rowsSeats[orofos]}
+                    handleAddSeatPlan={handleAddSeatPlan}
+                    handlRemoveSeatPlan={handlRemoveSeatPlan}
+                    numberOfPassengersPlannings={2}
+                />
             )}
+          
             {rowsSeats && rowsSeats[orofos] && (
-  
-            
-                <DatePicker selected={bookingDay} onChange={date => handleDateChange(date)} />
-               
+                <DatePicker
+                    selected={bookingDay}
+                    onChange={date => handleDateChange(date)}
+                />
             )}
+           
+            {rowsSeats && rowsSeats[orofos] && (
+                
+                <TimePicker onChange={time => onTimeChange(time)} value={from_hour}  />
+            )}
+           
+            {rowsSeats && rowsSeats[orofos] && (
+                <TimePicker onChange={time => onTimeToChange(time) } value={to_hour} />
+            )}
+              {rowsSeats && rowsSeats[orofos] && (<div>Επιλέξτε Ημερομηνία και Ώρα από-προς</div>)}
         </div>
     );
 };

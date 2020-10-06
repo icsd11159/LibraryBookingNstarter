@@ -18,7 +18,7 @@ Route::post('/registerc', 'RegisterControllers@postRegister');
 Route::get('/libraryseats', 'LibrarySeatController@index');
 Route::get('/bookingseats', 'LibrarySeatController@AddBooking');
 Route::get('/checkins', 'CheckinController@getCheckin');
-Route::post('/checkins', 'CheckinController@postCheckin');
+Route::get('/hascheckins', 'CheckinController@hasCheckin');
 
 
 Log::info("Api.php");

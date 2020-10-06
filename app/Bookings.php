@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Log;
 use App\Seat;
 class Bookings extends Model
 {
+    public function comments()
+    {
+        return $this->hasMany('App\Seat');
+    }
     public static function getBooking(){
 
         // if($id==0){
@@ -17,6 +21,46 @@ class Bookings extends Model
  
        //  }
          return $value;
+       }
+       public static function getBookingDateTime($date,$from_hour,$to_hour, $orofos){
+        $date=explode('T', $date, 2);
+        Log::info(   $date[0]  );
+           $value=DB::table('library_bookings')->where('date',$date[0])->where('checkin','1')->exists();
+         
+      
+       if( $value!=1){ 
+  
+        return 0;
+       }
+       else{
+        Log::info( " Find the exist!" );
+        $checkinid=DB::table('library_seat')->where('type','seat')->where('room_name',$orofos)->get();
+        $count=0;
+     //$comments =  App\Models\Post::find(1)->comments;
+        //App\Models\Post::find(1)->comments()->where('title', 'foo')->first();
+        foreach($checkinid as $chec){
+            $checkins=DB::table('library_bookings')->where('seat_id',$chec->id)->where('date',$date[0])->where('checkin','1')->exists();
+            if( $checkins==1){
+                $count++;
+            }
+        }
+        
+        $notcheckins=DB::table('library_seat')->where('type','seat')->where('room_name',$orofos)->count();
+        Log::info(   $count  );
+        Log::info(  $notcheckins  );
+       if($notcheckins>0){
+        $pososto=($count*100)/$notcheckins;
+       }else{
+        $pososto=false;
+       }
+      Log::info(  $pososto  );
+        return  $pososto;
+       }
+       
+       }
+       public static function UpdateCheckin($id){
+             $update=DB::table('library_bookings')->where('user_id',$id)->update(array('checkin' => '1'));  
+             return $update;
        }
        public static function insertBookingData($data){
              

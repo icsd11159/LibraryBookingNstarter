@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Seat;
 use Illuminate\Support\Facades\Log;
 use App\Users;
+use App\Bookings;
 use Illuminate\Support\Facades\DB;
 class CheckinController extends Controller
 {
@@ -35,8 +36,10 @@ class CheckinController extends Controller
      $id = Users::where('email', $email)->value('id');
      Log::info(  $id  );
      $seatData=Seat::getseatofUser($id);
+     //$bookingData=Bookings::getBookingofUser($id);
      Log::info(  $seatData );
      if( $seatData){
+         Bookings::UpdateCheckin($id);
         return  $seatData;
      }
      else{
@@ -47,4 +50,15 @@ class CheckinController extends Controller
     }
    
   }  
+
+  public function hasCheckin(Request $request){
+
+    $request_data=$request->all();
+    $date = $request_data['date'];
+    $from_hour = $request_data['from_hour'];
+    $to_hour = $request_data['to_hour'];
+    $orofos = $request_data['orofos'];
+    $bookingDatae=Bookings::getBookingDateTime($date,$from_hour,$to_hour,$orofos);
+    return $bookingDatae;
+  }
 }
