@@ -122,7 +122,7 @@
          <td>{{ $user->date }}</td>
          <td>{{ $user->from_hour }}</td>
          <td>{{ $user->to_hour }}</td>
-         <td height="30"><a href='editUser/{{ $user->id }}'>Update/Delete</a> </td>
+         <td height="30"><a href='editSeat/{{ $user->id }}'>Update/Delete</a> </td>
        </tr>
        @endforeach
     </table>
@@ -135,7 +135,7 @@
   <form method='post' action='/save'  ALIGN="center" >
    <table>
      <tr>
-       <td colspan='2'><h1>  <a href='/deleteUser/{{ $userData['editData'][0]->id }}'>Delete</a> Or Edit record</h1></td>
+       <td colspan='2'><h1>  <a href='/deleteSeat/{{ $userData['editData'][0]->id }}'>Delete</a> Or Edit record</h1></td>
      </tr>
      <tr>
        <td colspan="2">{{ csrf_field() }}</td>

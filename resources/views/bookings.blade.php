@@ -33,7 +33,7 @@
 <body>
 
 
-   <form method='post' action='/saveBookings'>
+   <form method='get' action='/saveBookings'>
 
      <!-- Message -->
      @if(Session::has('message'))

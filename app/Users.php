@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 class Users extends Model
 {  
      protected $fillable = [
-    'name', 'email', 'password',
+    'name', 'email', 'password','role'
 ];
 
 /**
@@ -28,6 +28,23 @@ protected $hidden = [
 protected $casts = [
     'email_verified_at' => 'datetime',
 ];
+/* public function isAdmin()
+{
+    if($this->role === 0)
+    { 
+        return 0; 
+    } 
+    else if($this->role === 1)
+    { 
+        return 1; 
+    }
+    else if($this->role === 2)
+    { 
+        return 3; 
+    }else{
+        return 4;
+    }
+} */
 public static function getUsers(){
 
     
@@ -72,6 +89,14 @@ public static function getUserName($id){
 
     
     $value=DB::table('users')->where('id',$id)->value('name');
+    Log::info(print_r( $value, true));
+
+ return $value;
+}
+public static function getUserIdBymail($email){
+
+    
+    $value=DB::table('users')->where('email',$email)->value('id');
     Log::info(print_r( $value, true));
 
  return $value;

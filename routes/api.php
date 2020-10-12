@@ -19,12 +19,12 @@ Route::get('/libraryseats', 'LibrarySeatController@index');
 Route::get('/bookingseats', 'LibrarySeatController@AddBooking');
 Route::get('/checkins', 'CheckinController@getCheckin');
 Route::get('/hascheckins', 'CheckinController@hasCheckin');
-
+Route::get('/getbook','BooksController@index');
+Route::post('/borrowbook', 'BorrowingController@postBorrow');
+Route::get('/suggestedbook', 'BorrowingController@getSuggestedbook');
 
 Log::info("Api.php");
-Route::get('/login', array(
-    'uses' => 'LoginControllers@showLogin'
-  ));
+
 /* 
 Route::middleware('auth:api')->post('/login', function (Request $request) {
    // Route::post('api/login', 'Api\Login.php');

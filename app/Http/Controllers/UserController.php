@@ -16,10 +16,10 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    /* public function __construct()
     {
         $this->middleware('auth');
-    }
+    } */
     public function index(){
  
        
@@ -70,9 +70,9 @@ class UserController extends Controller
             $photo = $request->input('photo');
             $role = $request->input('role');        
             $userData = Users::getUsersData($editid);
-            $email_verified_at	= $userData[0]->email_verified_at;
-            $password = $userData[0]->password;
-            $remember_token =$userData[0]->remember_token;
+            $email_verified_at	= null;
+            $password = '';
+            $remember_token =null;
         
         
                 $data = array("name"=>$name, "email"=>$email, "phone"=>$phone,  

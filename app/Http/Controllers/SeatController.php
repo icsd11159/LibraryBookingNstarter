@@ -15,10 +15,10 @@ class SeatController extends Controller
      *
      * @return void
      */
-    public function __construct()
+/*     public function __construct()
     {
         $this->middleware('auth');
-    }
+    } */
     public function index(){
  
        
@@ -36,7 +36,23 @@ class SeatController extends Controller
         //return view('index')->with("userData",$userData);
         
       }
+      public function home(){
+ 
+       
+        $userData['data'] = Seat::getseatData();
+        $userData['userData'] = Users::getUsers();
+       // $userData['edit'] = $id;
     
+        // Fetch edit record
+       // if($id>0){
+         // $userData['editData'] = Seat::getseatData();
+      //  }
+     // Log::info(print_r( $userData, true));
+        // Pass to view
+        return view('index')->with("userData",$userData);
+        //return view('index')->with("userData",$userData);
+        
+      }
       public function save(Request $request){
       
   
@@ -112,7 +128,7 @@ class SeatController extends Controller
         }
         return redirect()->action('SeatController@index');
       }
-      public function editUser($id){
+      public function editSeat($id){
     
       //  if($id != 0){
           // Delete

@@ -41,13 +41,10 @@ class LoginControllers extends Controller
     }
    
   }  
+
     
-    function showLogin()
-    {
-    // Form View
-    return view('login');
-    }
-  public
+  
+ 
   function doLogout()
     {
     Auth::logout(); // logging out user
