@@ -126,7 +126,8 @@ class Index extends React.Component {
             books: [],
             borrowed: "Επέλεξε βιβλίο",
             book_id: null,
-            borrowSuccess: false
+            borrowSuccess: false,
+            suggested:[]
 
             /*   rowsSeat:[[{number:'1A' , table:false, isReserved:false, orientation:true ,tooltip:"1A"},{number:"1B" , table:true, isReserved:false, orientation:false ,tooltip:"TABLE"}],
   [{number:"T" , table:false, isReserved:false, orientation:false ,tooltip:"TABLE"}],
@@ -527,7 +528,8 @@ class Index extends React.Component {
             }, 3000);
         });
     };
-    handleGeτSuggested =(username)=>{
+    handleGeτSuggestedfromusers = (book_id)=>{}//afou epileksei ena
+    handleGeτSuggested =(username)=>{ //me oti exei epileksei mexri twra
         return axios({
             url: "api/suggestedbook",
             method: "GET",
@@ -537,7 +539,7 @@ class Index extends React.Component {
                 Accept: "application/json"
             },
             params: {
-                id: this.state.book_id,
+    
                 user: this.state.username
             }
         })
@@ -550,7 +552,7 @@ class Index extends React.Component {
                     // this.setState({rowsSeats:null } ,()=>{
                     //  let orofos=[{'Ισόγειο':[],'Όροφος1':[],'Όροφος2':[],'Όροφος3':[]}];//
                     this.setState({
-                        borrowSuccess: true
+                        suggested: res.data
                     });
                     // });
                 }

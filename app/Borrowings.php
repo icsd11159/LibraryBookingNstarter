@@ -21,6 +21,7 @@ class Borrowings extends Model
         return $this->belongsTo('App\Books', 'book_id', 'id');
     }
 
+
     public static function insertBorrowingsData($user,$book_id){
              
     
@@ -40,4 +41,8 @@ class Borrowings extends Model
 
 
  } 
+ public static function getSuggestedbooks($user){
+    $books=DB::table('borrowings')->where('user_id',$user)->get();
+    $books->where('type','')
+ }
 }
