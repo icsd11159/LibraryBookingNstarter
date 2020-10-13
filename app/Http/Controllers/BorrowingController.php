@@ -27,7 +27,13 @@ class BorrowingController extends Controller
         $user = $request_data['user'];                   
        
         $user_id = Users::getUserIdBymail( $user);
-        $suggest= Borrowings::getSuggestedbooks($user_id);
+        $suggest['category']= Borrowings::getSuggestedbooks($user_id);
+        $suggest['writer'] = Borrowings::getSuggestedWriterbooks($user_id);
+       
+     
+        
+        
+         
         return   $suggest;
     }
     

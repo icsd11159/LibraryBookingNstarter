@@ -528,7 +528,7 @@ class Index extends React.Component {
             }, 3000);
         });
     };
-    handleGeτSuggestedfromusers = (book_id)=>{}//afou epileksei ena
+    handleGeτSuggestedfromusers = (book_id)=>{}//afou epileksei ena me vasi xristes
     handleGeτSuggested =(username)=>{ //me oti exei epileksei mexri twra
         return axios({
             url: "api/suggestedbook",
@@ -554,6 +554,7 @@ class Index extends React.Component {
                     this.setState({
                         suggested: res.data
                     });
+              
                     // });
                 }
             })
