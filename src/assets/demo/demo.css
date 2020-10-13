@@ -13,7 +13,10 @@
   display: block;
   width: 100%;
 }
-
+.photo {
+  height: 320px;
+  width: 190px;
+}
 .typography-line span {
   bottom: 10px;
   color: #c0c1c2;

@@ -626,20 +626,21 @@ class Index extends React.Component {
                                             
                                             </div>
                                             <div>
+                                            <div>
+                                          
+                                          {this.state.suggested_writer && this.state.isLoggein? 
+                                         
+                                          this.state.suggested_writer['book_name']
+                                         
+                                          :null}
+                                          </div>
                                             {this.state.suggested_writer && this.state.isLoggein && this.state.suggested_writer['id']? 
                                        
-                                           <img size="50" src={require("../../../public/images/books/"+this.state.suggested_writer['id']+".jpg")} />
+                                           <img className="photo"  src={require("../../../public/images/books/"+this.state.suggested_writer['id']+".jpg")} />
                                            :null}
 
                                             </div>
-                                            <div>
-                                          
-                                            {this.state.suggested_writer && this.state.isLoggein? 
-                                           
-                                            this.state.suggested_writer['book_name']
-                                           
-                                            :null}
-                                            </div>
+                                            
                                             <div>
                                             <button
                                                     type="button"
@@ -695,6 +696,7 @@ class Index extends React.Component {
                                                                             size="40"
                                                                             heigh="40"
                                                                             width="40"
+                                                                            id={index}
                                                                             onClick={e =>
                                                                                 this.handleBorrowBook(
                                                                                     this
