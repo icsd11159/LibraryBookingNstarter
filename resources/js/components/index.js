@@ -127,7 +127,9 @@ class Index extends React.Component {
             borrowed: "Επέλεξε βιβλίο",
             book_id: null,
             borrowSuccess: false,
-            suggested:[]
+            suggested:[],
+            suggested_category:[],
+            suggested_writer:[]
 
             /*   rowsSeat:[[{number:'1A' , table:false, isReserved:false, orientation:true ,tooltip:"1A"},{number:"1B" , table:true, isReserved:false, orientation:false ,tooltip:"TABLE"}],
   [{number:"T" , table:false, isReserved:false, orientation:false ,tooltip:"TABLE"}],
@@ -552,7 +554,9 @@ class Index extends React.Component {
                     // this.setState({rowsSeats:null } ,()=>{
                     //  let orofos=[{'Ισόγειο':[],'Όροφος1':[],'Όροφος2':[],'Όροφος3':[]}];//
                     this.setState({
-                        suggested: res.data
+                        suggested: res.data,
+                        suggested_category:res.data['category'],
+                        suggested_writer:res.data['writer']
                     });
               
                     // });
@@ -617,6 +621,25 @@ class Index extends React.Component {
 
                                     <div className="section section-tabs">
                                         <Container>
+                                            <div>
+                                            Προτείνεται με βάση τον συγγραφέα:
+                                            
+                                            </div>
+                                            <div>
+                                            {this.state.suggested_writer && this.state.isLoggein && this.state.suggested_writer['id']? 
+                                       
+                                           <img size="50" src={require("../../../public/images/books/"+this.state.suggested_writer['id']+".jpg")} />
+                                           :null}
+
+                                            </div>
+                                            <div>
+                                          
+                                            {this.state.suggested_writer && this.state.isLoggein? 
+                                           
+                                            this.state.suggested_writer['book_name']
+                                           
+                                            :null}
+                                            </div>
                                             <div>
                                             <button
                                                     type="button"
