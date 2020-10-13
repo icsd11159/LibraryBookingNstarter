@@ -127,9 +127,9 @@ class Index extends React.Component {
             borrowed: "Επέλεξε βιβλίο",
             book_id: null,
             borrowSuccess: false,
-            suggested:[],
-            suggested_category:[],
-            suggested_writer:[]
+            suggested: [],
+            suggested_category: [],
+            suggested_writer: []
 
             /*   rowsSeat:[[{number:'1A' , table:false, isReserved:false, orientation:true ,tooltip:"1A"},{number:"1B" , table:true, isReserved:false, orientation:false ,tooltip:"TABLE"}],
   [{number:"T" , table:false, isReserved:false, orientation:false ,tooltip:"TABLE"}],
@@ -515,9 +515,8 @@ class Index extends React.Component {
     // optional cofiguration
     handleLogin = (log, username) => {
         this.state.isLoggein = log;
-        this.setState({username : username},()=>{
+        this.setState({ username: username }, () => {
             this.handleGeτSuggested(username);
-
         });
         this.handleGetBook();
         console.log(username);
@@ -530,8 +529,9 @@ class Index extends React.Component {
             }, 3000);
         });
     };
-    handleGeτSuggestedfromusers = (book_id)=>{}//afou epileksei ena me vasi xristes
-    handleGeτSuggested =(username)=>{ //me oti exei epileksei mexri twra
+    handleGeτSuggestedfromusers = book_id => {}; //afou epileksei ena me vasi xristes
+    handleGeτSuggested = username => {
+        //me oti exei epileksei mexri twra
         return axios({
             url: "api/suggestedbook",
             method: "GET",
@@ -541,7 +541,6 @@ class Index extends React.Component {
                 Accept: "application/json"
             },
             params: {
-    
                 user: this.state.username
             }
         })
@@ -555,10 +554,10 @@ class Index extends React.Component {
                     //  let orofos=[{'Ισόγειο':[],'Όροφος1':[],'Όροφος2':[],'Όροφος3':[]}];//
                     this.setState({
                         suggested: res.data,
-                        suggested_category:res.data['category'],
-                        suggested_writer:res.data['writer']
+                        suggested_category: res.data["category"],
+                        suggested_writer: res.data["writer"]
                     });
-              
+
                     // });
                 }
             })
@@ -568,7 +567,7 @@ class Index extends React.Component {
                 console.log($response);
                 // this.props.handleLogin(false);
             });
-    }
+    };
     handleKrathseis = number => {
         console.log(number);
         this.setState = { menunumber: number };
@@ -618,31 +617,82 @@ class Index extends React.Component {
                             <div className="wrapper">
                                 <div className="main">
                                     <PageHeader />
-
+                                    <div>
+                                        <Container>
+                                        <div>
+                                            Προτείνεται με βάση τον
+                                                    συγγραφέα:
+                                                    &nbsp;
+                                                    Προτείνεται με βάση την
+                                                    κατηγορία:
+                                                    </div>
+                                            <div margin="25px">
+                                               
+                                                {this.state.suggested_writer &&
+                                                this.state.isLoggein &&
+                                                this.state.suggested_writer[
+                                                    "id"
+                                                ] ? (
+                                                    
+                                                    
+                                                
+                                                    <img
+                                                        className="photo"
+                                                        alt={this.state
+                                                            .suggested_writer[
+                                                            "book_name"
+                                                        ]}
+                                                        src={require("../../../public/images/books/" +
+                                                            this.state
+                                                                .suggested_writer[
+                                                                "id"
+                                                            ] +
+                                                            ".jpg")}
+                                                    />
+                                                  
+                                                ) : null}
+                                              &nbsp;&nbsp;&nbsp;&nbsp;
+                                              &nbsp;&nbsp;&nbsp;&nbsp;
+                                              &nbsp;&nbsp;&nbsp;&nbsp;
+                                              &nbsp;&nbsp;
+                                             
+                                                {this.state.isLoggein &&
+                                                this.state.suggested_category &&
+                                                this.state.suggested_category.length>0
+                                                  ? (
+                                                   
+                                                    this.state.suggested_category.map((category,index)=>{
+                                                        return(
+                                                           
+                                                    <img
+                                                        className="photo"
+                                                        alt={ this.state
+                                                            .suggested_category[index][
+                                                            "book_name"
+                                                        ] }
+                                                        src={require("../../../public/images/books/" +
+                                                            this.state
+                                                                .suggested_category[index][
+                                                                "id"
+                                                            ] +
+                                                            ".jpg")}
+                                                    />
+                                                    
+                                                  
+                                                        )
+                                                })
+                                               
+                                                ) : null}
+                                             
+                                            </div>
+                                            
+                                        </Container>
+                                      
+                                    </div>
                                     <div className="section section-tabs">
                                         <Container>
                                             <div>
-                                            Προτείνεται με βάση τον συγγραφέα:
-                                            
-                                            </div>
-                                            <div>
-                                            <div>
-                                          
-                                          {this.state.suggested_writer && this.state.isLoggein? 
-                                         
-                                          this.state.suggested_writer['book_name']
-                                         
-                                          :null}
-                                          </div>
-                                            {this.state.suggested_writer && this.state.isLoggein && this.state.suggested_writer['id']? 
-                                       
-                                           <img className="photo"  src={require("../../../public/images/books/"+this.state.suggested_writer['id']+".jpg")} />
-                                           :null}
-
-                                            </div>
-                                            
-                                            <div>
-                                            <button
+                                                <button
                                                     type="button"
                                                     className="btn-round"
                                                     color="primary"
@@ -653,7 +703,10 @@ class Index extends React.Component {
                                                 >
                                                     Κράτηση Βιβλίου
                                                 </button>
-                                               {this.state.borrowSuccess?"Ο δανεισμός του βιβλίου έγινε με επιτυχία":null}
+                                                {this.state.borrowSuccess
+                                                    ? "Ο δανεισμός του βιβλίου έγινε με επιτυχία"
+                                                    : null}
+
                                                 <UncontrolledDropdown nav>
                                                     <DropdownToggle
                                                         caret
@@ -696,7 +749,9 @@ class Index extends React.Component {
                                                                             size="40"
                                                                             heigh="40"
                                                                             width="40"
-                                                                            id={index}
+                                                                            id={
+                                                                                index
+                                                                            }
                                                                             onClick={e =>
                                                                                 this.handleBorrowBook(
                                                                                     this
@@ -721,14 +776,11 @@ class Index extends React.Component {
                                                             )}
                                                     </DropdownMenu>
                                                 </UncontrolledDropdown>
-
                                             </div>
                                             <div className="title">
                                                 <h3 className="mb-3">
                                                     Ημερολόγιο Κρατήσεων
                                                 </h3>
-
-                                              
 
                                                 {this.state.bookingSuccess &&
                                                     this.state

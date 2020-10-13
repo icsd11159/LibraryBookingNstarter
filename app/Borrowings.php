@@ -45,10 +45,12 @@ class Borrowings extends Model
     $books=DB::table('borrowings')->where('user_id',$user)->get();
   
     foreach($books as $book){
-        $book_id=$book->id;
+        $book_id=$book->book_id;
         $writers=DB::table('books')->where('id',$book_id)->value('author');
-         $writer=DB::table('books')->where('author',$writers)->take(1);
+        // $writer=DB::table('books')->where('author',$writers)->take(1);
+      
     }
+  
     $writer=DB::table('books')->where('author',$writers)->first();
     return $writer;
  }
@@ -58,8 +60,8 @@ class Borrowings extends Model
     $categoriesstring=['Φαντασίας','Πολιτικά','Ιστορικά','Επιστημονικά','Κοινωνικά'];
     $i=0;
     foreach($books as $book){
-        Log::info(print_r( $book, true));
-        $book_id=$book->id;
+       
+        $book_id=$book->book_id;
         $book_category=DB::table('books')->where('id',$book_id)->value('category'); 
         foreach( $categoriesstring as $strings){
             if( $book_category==$strings){
