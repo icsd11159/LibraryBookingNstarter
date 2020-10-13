@@ -28,7 +28,7 @@ class Borrowings extends Model
      
 
       $data = array('book_id'=>$book_id,"user_id"=>$user,
-      "reserved"=>1);
+      "reserved"=>0);
 
           Log::info(print_r( $data, true));
           // Insert
@@ -58,9 +58,9 @@ class Borrowings extends Model
     $books=DB::table('borrowings')->where('user_id',$user)->get();
     $categories=[0,0,0,0,0];
     $categoriesstring=['Φαντασίας','Πολιτικά','Ιστορικά','Επιστημονικά','Κοινωνικά'];
-    $i=0;
+  
     foreach($books as $book){
-       
+        $i=0;
         $book_id=$book->book_id;
         $book_category=DB::table('books')->where('id',$book_id)->value('category'); 
         foreach( $categoriesstring as $strings){
@@ -112,4 +112,14 @@ class Borrowings extends Model
           }*/
           
  }
+ public static function getsuggestedSelectedbooks($book_id,$user_id){
+    $books=DB::table('borrowings')->where('book_id',$book_id)->where('user_id','!=',$user_id)->take(2)->get();
+    $user1=$books[0]->user_id;
+    $user2=$books[1]->user_id;
+    $book['user1']=DB::table('borrowings')->where('book_id','!=',$book_id)->where('user_id',$user1)->first();
+    $book['user2']=DB::table('borrowings')->where('book_id','!=',$book_id)->where('user_id',$user2)->first();
+    return $book;
+ }
+
+
 }

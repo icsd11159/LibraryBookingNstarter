@@ -30,7 +30,7 @@ class Books extends Model
       }
       public static function getFreeBooks($book_id){
     
-        $value=DB::table('borrowings')->where('book_id',$book_id)->exists(); 
+        $value=DB::table('borrowings')->where('book_id',$book_id)->where('reserved',1)->exists(); 
         return  $value;
      
        

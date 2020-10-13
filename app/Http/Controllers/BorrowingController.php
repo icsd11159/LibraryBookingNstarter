@@ -22,6 +22,19 @@ class BorrowingController extends Controller
         $borrow= Borrowings::insertBorrowingsData($user_id,$book_id);
        return   $borrow;
     }
+    public function getsuggestedSelectedbook(Request $request){
+        $request_data=$request->all();            
+        $book_id = $request_data['book_id'];                   
+        $user = $request_data['user'];                   
+       
+        $user_id = Users::getUserIdBymail( $user);
+       
+        $suggest= Borrowings::getsuggestedSelectedbooks($book_id,$user_id);
+    
+       
+         
+        return   $suggest;
+    }
     public function getSuggestedbook(Request $request){
         $request_data=$request->all();            
         $user = $request_data['user'];                   
@@ -30,9 +43,6 @@ class BorrowingController extends Controller
         $suggest['category']= Borrowings::getSuggestedbooks($user_id);
         $suggest['writer'] = Borrowings::getSuggestedWriterbooks($user_id);
        
-     
-        
-        
          
         return   $suggest;
     }

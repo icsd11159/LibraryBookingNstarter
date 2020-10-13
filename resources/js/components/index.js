@@ -129,7 +129,9 @@ class Index extends React.Component {
             borrowSuccess: false,
             suggested: [],
             suggested_category: [],
-            suggested_writer: []
+            suggested_writer: [],
+            suggestedSelected:{},
+            epilogi:null
 
             /*   rowsSeat:[[{number:'1A' , table:false, isReserved:false, orientation:true ,tooltip:"1A"},{number:"1B" , table:true, isReserved:false, orientation:false ,tooltip:"TABLE"}],
   [{number:"T" , table:false, isReserved:false, orientation:false ,tooltip:"TABLE"}],
@@ -412,6 +414,8 @@ class Index extends React.Component {
                     //  let orofos=[{'Ισόγειο':[],'Όροφος1':[],'Όροφος2':[],'Όροφος3':[]}];//
                     this.setState({
                         borrowSuccess: true
+                    },()=>{
+                        this.handleGeτSuggestedfromusers(this.state.book_id)
                     });
                     // });
                 }
@@ -529,7 +533,46 @@ class Index extends React.Component {
             }, 3000);
         });
     };
-    handleGeτSuggestedfromusers = book_id => {}; //afou epileksei ena me vasi xristes
+    handleGeτSuggestedfromusers = book_id => {
+
+        return axios({
+            url: "api/suggestedSelectedbook",
+            method: "GET",
+            header: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+            params: {
+                book_id: book_id,
+                user: this.state.username
+            }
+        })
+            .then(res => {
+                if (!res.data) {
+                    console.log(res.data);
+                } else {
+                    console.log(res.data);
+
+                    // this.setState({rowsSeats:null } ,()=>{
+                    //  let orofos=[{'Ισόγειο':[],'Όροφος1':[],'Όροφος2':[],'Όροφος3':[]}];//
+                    this.setState({
+                        suggestedSelected: res.data,
+                        epilogi:" Χρήστες που δανείστηκαν το  "+ this.state.borrowed+
+                        " προτίμησαν και αυτά:"
+                    });
+
+                    // });
+                }
+            })
+
+            .catch(function($response) {
+                //handle error
+                console.log($response);
+                // this.props.handleLogin(false);
+            });
+
+    }; //afou epileksei ena me vasi xristes
     handleGeτSuggested = username => {
         //me oti exei epileksei mexri twra
         return axios({
@@ -625,6 +668,17 @@ class Index extends React.Component {
                                                     &nbsp;
                                                     Προτείνεται με βάση την
                                                     κατηγορία:
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                     &nbsp;&nbsp;&nbsp;&nbsp;
+                                                      &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+                                                      &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;
+                                                      &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                                                      &nbsp;&nbsp;
+                                                    {this.state.epilogi?this.state.epilogi:null}
+
+                                                
+                                                   
                                                     </div>
                                             <div margin="25px">
                                                
@@ -678,11 +732,40 @@ class Index extends React.Component {
                                                             ".jpg")}
                                                     />
                                                     
+                                                    
                                                   
-                                                        )
+                                                        );
+                                                        
                                                 })
                                                
                                                 ) : null}
+                                                  &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                     &nbsp;&nbsp;&nbsp;&nbsp;
+                                                      &nbsp;&nbsp;
+                                                     
+                                                    {this.state.isLoggein && this.state.suggestedSelected   ? (
+                                                   
+                                                   Object.keys(this.state.suggestedSelected).map((category,index)=>{
+                                                  console.log(this.state
+                                                    .suggestedSelected[category].book_id)
+                                                       return(
+                                                         
+                                                   <img
+                                                       className="photo"
+                                                       
+                                                       src={require("../../../public/images/books/" +
+                                                           this.state .suggestedSelected[category].book_id
+                                                           +".jpg")}
+                                                   />
+                                                   
+                                                   
+                                                 
+                                                       );
+                                                       
+                                               })
+                                              
+                                               ) : null}
                                              
                                             </div>
                                             
