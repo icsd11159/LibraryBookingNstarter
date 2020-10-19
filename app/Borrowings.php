@@ -41,6 +41,18 @@ class Borrowings extends Model
 
 
  } 
+ public static function getHistorybooks($user){
+  $books=DB::table('borrowings')->where('user_id',$user)->get();
+  $histories=[];
+$index=0;
+  foreach($books as $book){
+      $book_id=$book->book_id;
+      $histories[$index]=DB::table('books')->where('id',$book_id)->get();
+    $index++;
+  }
+
+  return $histories;
+}
  public static function getSuggestedWriterbooks($user){
     $books=DB::table('borrowings')->where('user_id',$user)->get();
   

@@ -35,6 +35,18 @@ class BorrowingController extends Controller
          
         return   $suggest;
     }
+    public function getHistory(Request $request){
+        $request_data=$request->all();                
+        $user = $request_data['user'];                   
+       
+        $user_id = Users::getUserIdBymail( $user);
+       
+        $history= Borrowings::getHistorybooks($user_id);
+    
+       
+         
+        return   $history;
+    }
     public function getSuggestedbook(Request $request){
         $request_data=$request->all();            
         $user = $request_data['user'];                   

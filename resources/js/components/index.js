@@ -131,7 +131,8 @@ class Index extends React.Component {
             suggested_category: [],
             suggested_writer: [],
             suggestedSelected:{},
-            epilogi:null
+            epilogi:null,
+            history:[]
 
             /*   rowsSeat:[[{number:'1A' , table:false, isReserved:false, orientation:true ,tooltip:"1A"},{number:"1B" , table:true, isReserved:false, orientation:false ,tooltip:"TABLE"}],
   [{number:"T" , table:false, isReserved:false, orientation:false ,tooltip:"TABLE"}],
@@ -521,6 +522,7 @@ class Index extends React.Component {
         this.state.isLoggein = log;
         this.setState({ username: username }, () => {
             this.handleGeτSuggested(username);
+            this.handleHistory(username);
         });
         this.handleGetBook();
         console.log(username);
@@ -572,7 +574,8 @@ class Index extends React.Component {
                 // this.props.handleLogin(false);
             });
 
-    }; //afou epileksei ena me vasi xristes
+    }; 
+    //afou epileksei ena me vasi xristes
     handleGeτSuggested = username => {
         //me oti exei epileksei mexri twra
         return axios({
@@ -599,6 +602,44 @@ class Index extends React.Component {
                         suggested: res.data,
                         suggested_category: res.data["category"],
                         suggested_writer: res.data["writer"]
+                    });
+
+                    // });
+                }
+            })
+
+            .catch(function($response) {
+                //handle error
+                console.log($response);
+                // this.props.handleLogin(false);
+            });
+    };
+    //istoriko
+    handleHistory = username => {
+        //me oti exei epileksei mexri twra
+        return axios({
+            url: "api/history",
+            method: "GET",
+            header: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+            params: {
+                user: this.state.username
+            }
+        })
+            .then(res => {
+                if (!res.data) {
+                    console.log(res.data);
+                } else {
+                    console.log("history");
+                    console.log(res.data);
+
+                    // this.setState({rowsSeats:null } ,()=>{
+                    //  let orofos=[{'Ισόγειο':[],'Όροφος1':[],'Όροφος2':[],'Όροφος3':[]}];//
+                    this.setState({
+                        history: res.data
                     });
 
                     // });
@@ -676,9 +717,6 @@ class Index extends React.Component {
                                                       &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                                                       &nbsp;&nbsp;
                                                     {this.state.epilogi?this.state.epilogi:null}
-
-                                                
-                                                   
                                                     </div>
                                             <div margin="25px">
                                                
@@ -772,6 +810,76 @@ class Index extends React.Component {
                                         </Container>
                                       
                                     </div>
+                                    <div className="section section-tabs">
+                                        <Container>
+                                            <div>
+                                                <button
+                                                    type="button"
+                                                    className="btn-round"
+                                                    color="primary"
+                                                    size="lg"
+                                                    onClick={e =>
+                                                        this.handleTheBorrow()
+                                                    }
+                                                >
+                                                    Ιστορικό Κρατήσεων
+                                                </button>
+
+                                                <UncontrolledDropdown nav>
+                                                    <DropdownToggle
+                                                        caret
+                                                        color="default"
+                                                        data-toggle="dropdown"
+                                                        href="#pablo"
+                                                        nav
+                                                        onClick={e =>
+                                                            e.preventDefault()
+                                                        }
+                                                    >
+                                                        <i className="fa fa-cogs d-lg-none d-xl-none" />
+                                                        Τα βιβλία μου
+                                                    </DropdownToggle>
+                                                    <DropdownMenu
+                                                        size="40"
+                                                        heigh="40"
+                                                        width="40"
+                                                    >
+                                                        {this.state.history &&
+                                                            this.state.history
+                                                                .length > 0 &&
+                                                            this.state.history.map(
+                                                                (
+                                                                    book,
+                                                                    index
+                                                                ) => {
+                                                                   
+                                                                    return (
+                                                                        <DropdownItem
+                                                                            size="40"
+                                                                            heigh="40"
+                                                                            width="40"
+                                                                            id={
+                                                                                index
+                                                                            }
+                                                                           
+                                                                        >
+                                                                            {
+                                                                                this
+                                                                                    .state
+                                                                                    .history[
+                                                                                    index
+                                                                                ][0]
+                                                                                    .book_name
+                                                                            }
+                                                                        </DropdownItem>
+                                                                    );
+                                                                }
+                                                            )}
+                                                    </DropdownMenu>
+                                                </UncontrolledDropdown>
+                                            </div>
+                                            </Container>
+                                            </div>
                                     <div className="section section-tabs">
                                         <Container>
                                             <div>

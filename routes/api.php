@@ -23,6 +23,7 @@ Route::get('/getbook','BooksController@index');
 Route::post('/borrowbook', 'BorrowingController@postBorrow');
 Route::get('/suggestedbook', 'BorrowingController@getSuggestedbook');
 Route::get('/suggestedSelectedbook', 'BorrowingController@getsuggestedSelectedbook');
+Route::get('/history', 'BorrowingController@getHistory');
 
 Log::info("Api.php");
 
